@@ -6,7 +6,7 @@
 
 **1.本系统采用了Tencent OS-tiny这一物联网实时操作系统来实现片上资源的智能化管理。** 一方面灵活高效的管理了系统的片上资源，为系统并发的执行多个任务提供了基础；另一方面，搭载TencentOS-tiny的端侧系统可以方便的与腾讯云对接，依托于腾讯云服务器上的丰富资源为端云结合带来了更多的可能性。
 
-**2.本系统搭载了Tensorflow Lite Micro的超低功耗深度学习AI推理框架以及Arm CMSIS-NN加速库。** Tensorflow Lite Micro是tensorflow框架针对微控制器应用场景所专门设计的深度学习推理框架，它占用的资源少，运行时内存最低只需要16KB，同时其兼容tensorflow框架，依托于Tensorflow平台强大的生态背景，使得更多开发者可以方便的集成、使用AI算法。Tensorflow Lite Micro通过使能Arm开源加速库CMSIS-NN，为端侧带来人工智能的新活力(https://www.keil.com/pack/doc/CMSIS/NN/html/index.html)。
+**2.本系统搭载了Tensorflow Lite Micro的超低功耗深度学习AI推理框架以及Arm CMSIS-NN加速库。** Tensorflow Lite Micro是Tensorflow框架针对微控制器应用场景所专门设计的深度学习推理框架，它占用的资源少，运行时内存最低只需要16KB，同时其兼容Tensorflow框架，依托于Tensorflow平台强大的生态背景，使得更多开发者可以方便的集成、使用AI算法。Tensorflow Lite Micro通过使能Arm开源加速库CMSIS-NN，为端侧带来人工智能的新活力(https://www.keil.com/pack/doc/CMSIS/NN/html/index.html)。
 
 _**目前**_[_**Tensorflow Lite Micro及CMSIS NN组件**_](https://github.com/Tencent/TencentOS-tiny/tree/master/components/ai/tflite_micro)_**已经进入Tencent OS-tiny主仓库，其中提供的了Tensorflow Lite Micro的全部源码以及针对ARM Cortex M系列的MDK lib库文件，可以方便的集成到MCU开发环境中。**
 
