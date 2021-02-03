@@ -1,22 +1,22 @@
 # 一、概述
 
-随着边缘计算和深度学习领域的不断发展，越来越多的边缘计算设备开始出现在我们的视野中。我们本次提出的这一方案着眼于边缘计算与深度学习场景，提出了一款应用于无人值守的仓储、居民社区或危险禁入区域的智能监控方案，具有成本低、功耗低等优势，并可以大量分布式投放且可以基于具体场景需求修改模型功能，此处我们以人像检测为例，对于长时间徘徊于某区域的行人进行智能识别，并且将异常现象及时上报至云端，从而实现边缘AI与Tencent OS-tiny完美结合的智能安防案例。
+随着边缘计算和深度学习领域的不断发展，越来越多的边缘计算设备开始出现在我们的视野中。我们本次提出的这一方案着眼于边缘计算与深度学习场景，提出了一款应用于无人值守的仓储、居民社区或危险禁入区域的智能监控方案，具有成本低、功耗低等优势，并可以大量分布式投放且可以基于具体场景需求修改模型功能，此处我们以人像检测为例，对于长时间徘徊于某区域的行人进行智能识别，并且将异常现象及时上报至云端，从而实现边缘AI与TencentOS-tiny完美结合的智能安防案例。
 
 # **二、系统的创新点：**
 
-**1.本系统采用了Tencent OS-tiny这一物联网实时操作系统来实现片上资源的智能化管理。** 一方面灵活高效的管理了系统的片上资源，为系统并发的执行多个任务提供了基础；另一方面，搭载Tencent OS-tiny的端侧系统可以方便的与腾讯云对接，依托于腾讯云服务器上的丰富资源为端云结合带来了更多的可能性。
+**1.本系统采用了TencentOS-tiny这一物联网实时操作系统来实现片上资源的智能化管理。** 一方面灵活高效的管理了系统的片上资源，为系统并发的执行多个任务提供了基础；另一方面，搭载TencentOS-tiny的端侧系统可以方便的与腾讯云对接，依托于腾讯云服务器上的丰富资源为端云结合带来了更多的可能性。
 
 **2.本系统搭载了Tensorflow Lite Micro的超低功耗深度学习AI推理框架以及Arm CMSIS-NN加速库。** Tensorflow Lite Micro是Tensorflow框架针对微控制器应用场景所专门设计的深度学习推理框架，它占用的资源少，运行时内存最低只需要16KB，同时其兼容Tensorflow框架，依托于Tensorflow平台强大的生态背景，使得更多开发者可以方便的集成、使用AI算法。Tensorflow Lite Micro通过使能Arm开源加速库CMSIS-NN，为端侧带来人工智能的新活力(https://www.keil.com/pack/doc/CMSIS/NN/html/index.html)。
 
-_**目前**_[_**Tensorflow Lite Micro及CMSIS NN组件**_](https://github.com/Tencent/TencentOS-tiny/tree/master/components/ai/tflite_micro)_**已经进入Tencent OS-tiny主仓库，其中提供了Tensorflow Lite Micro的全部源码以及针对ARM Cortex-M系列的MDK lib库文件，可以方便的集成到MCU开发环境中。**
+_**目前**_[_**Tensorflow Lite Micro及CMSIS NN组件**_](https://github.com/Tencent/TencentOS-tiny/tree/master/components/ai/tflite_micro)_**已经进入TencentOS-tiny主仓库，其中提供了Tensorflow Lite Micro的全部源码以及针对ARM Cortex-M系列的MDK lib库文件，可以方便的集成到MCU开发环境中。**
 
-**3.本系统将边缘AI和Tencent OS-tiny结合在一起，面向区域安防管理，提出了一种新的端云系统架构**。通过对这种机制的验证并且配合详细的用户移植文档，让整个系统具备在多领域多场景的可迁移性与易用性。
+**3.本系统将边缘AI和TencentOS-tiny结合在一起，面向区域安防管理，提出了一种新的端云系统架构**。通过对这种机制的验证并且配合详细的用户移植文档，让整个系统具备在多领域多场景的可迁移性与易用性。
 
 系统拓扑结构图：
 
 ![系统架构图](./image/设计框架.jpg)
 
-单个Tencent OS-tiny内部结构图：
+单个TencentOS-tiny内部结构图：
 
 
 
@@ -26,9 +26,9 @@ _**目前**_[_**Tensorflow Lite Micro及CMSIS NN组件**_](https://github.com/Te
 
 ![系统硬件图](./image/微信图片_20210110142403.jpg)
 
-整体系统的工作流程可以概述为以下内容：首先基于Tencent OS-tiny实现了一个超低功耗的机器视觉应用——基于深度学习算法以及Tensorflow Lite Micro 端侧神经网络推理框架的小区域人形检测，根据我们实际的测试，行人检测的正确率达到84%，且可以在MCU端上运行；在MCU端检测到有人之后，MCU端将有关行人的数据上传到云端，云端根据收到的数据来唤醒相关的高性能设备，进一步获取行人的真实数据。
+整体系统的工作流程可以概述为以下内容：首先基于TencentOS-tiny实现了一个超低功耗的机器视觉应用——基于深度学习算法以及Tensorflow Lite Micro 端侧神经网络推理框架的小区域人形检测，根据我们实际的测试，行人检测的正确率达到84%，且可以在MCU端上运行；在MCU端检测到有人之后，MCU端将有关行人的数据上传到云端，云端根据收到的数据来唤醒相关的高性能设备，进一步获取行人的真实数据。
 
-相比与传统的社区管理员通过大量连接了高清摄像头的屏幕来完成的社区的安全管理的方法相比，我们这种基于Tencent OS-tiny实现的超低功耗机器视觉与端云协同的智能安防系统只会在端侧检测到有人之后才会将视频流接入管理员的屏幕，不仅减轻了管理员的工作负担，而且更重要的是端侧实现的智能化应用将极大的节省了系统的带宽资源，在提升系统响应的同时也降低了成本，可以称的上是一种比较好的解决方案。
+相比与传统的社区管理员通过大量连接了高清摄像头的屏幕来完成社区安全管理的方法相比，这种基于TencentOS-tiny和CMSIS-NN实现的超低功耗机器视觉与端云协同的智能安防系统只会在端侧检测到有人之后才会将视频流接入管理员的屏幕，不仅减轻了管理员的工作负担，而且更重要的是端侧实现的智能化应用将极大的节省了系统的带宽资源，在提升系统响应的同时也降低了成本，可以称的上是一种比较好的解决方案。
 
 演示视频：
 
@@ -36,7 +36,7 @@ _**目前**_[_**Tensorflow Lite Micro及CMSIS NN组件**_](https://github.com/Te
 
 # 三、系统移植概述：
 
-我们的工作是已于近期开源至官方主仓库，而且开发者可以按照指南进行复现。
+我们已将相关代码和文档开源至官方主仓库，而且开发者可以按照指南进行复现。
 
 #### **1. 准备目标硬件（开发板/传感器/模组）**
 
@@ -48,7 +48,7 @@ _**目前**_[_**Tensorflow Lite Micro及CMSIS NN组件**_](https://github.com/Te
 
 ## **2.准备系统软件**
 
-- 首先，参考TencentOS tiny基于keil的移植教程进行移植： [https://github.com/Tencent/TencentOS-tiny/blob/master/doc/10.Porting\_Manual\_for\_KEIL.md](https://github.com/Tencent/TencentOS-tiny/blob/master/doc/10.Porting_Manual_for_KEIL.md)。为了方便初始化MCU的外设，后续要继续使用STM32CubeMX软件，请确保安装了该软件；注：在系统移植成功后，工程可以进行线程任务切换，通过串口打印"hello world"，基础keil工程代码准备完毕。
+- 首先，参考TencentOS-tiny基于Keil的移植教程进行移植： [https://github.com/Tencent/TencentOS-tiny/blob/master/doc/10.Porting\_Manual\_for\_KEIL.md](https://github.com/Tencent/TencentOS-tiny/blob/master/doc/10.Porting_Manual_for_KEIL.md)。为了方便初始化MCU的外设，后续要继续使用STM32CubeMX软件，请确保安装了该软件；注：在系统移植成功后，工程可以进行线程任务切换，通过串口打印"hello world"，基础Keil工程代码准备完毕。
 - 准备Tensorflow Lite Micro组件。在主仓库中的 `TencentOS-tiny\components\ai\tflite_micro` 路径下，本次我们主要是要使用Tensorflow Lite Micro推理框架来实现行人检测任务，所以可以直接采用对应内核的lib库文件的方式来将其集成到系统中，在实际应用的过程中只需要编写调用有关的API即可以实现AI算法在MCU平台上的部署。
 
 ## **3.系统移植流程**：
@@ -290,4 +290,4 @@ void deal_down_stream_user_logic(void *client, ProductDataDefine   * pData)
 
 # 四、结语
 
-在本次作品中，我们主要提出了一种基于边缘AI+tencentos-tiny的新架构，虽然在用户前端的包装还有许多可以改进的空间，但是通过对这种机制的验证并且配合详细的用户移植文档，使我们这个作品具备了更多的可迁移性，同时也打开了Tencent OS-tiny对于人工智能领域的支持，在未来我们会继续完善Tensorflow Lite Micro组件并不断更新新的应用，致力于丰富整个Tencent OS-tiny的生态。
+我们提出了一种基于边缘AI+TencentOS-tiny的新架构，虽然在用户前端的包装还有许多可以改进的空间，但是通过对这种机制的验证并且配合详细的用户移植文档，使我们的工作具备了更多的可迁移性，同时也打开了TencentOS-tiny对于人工智能领域的支持，在未来我们会继续完善Tensorflow Lite Micro组件并不断更新新的应用，致力于丰富整个TencentOS-tiny以及Arm生态。
