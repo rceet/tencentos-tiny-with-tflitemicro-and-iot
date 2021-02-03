@@ -50,6 +50,7 @@ _**目前**_[_**Tensorflow Lite Micro及CMSIS NN组件**_](https://github.com/Te
 
 - 首先，参考TencentOS-tiny基于Keil的移植教程进行移植： [https://github.com/Tencent/TencentOS-tiny/blob/master/doc/10.Porting\_Manual\_for\_KEIL.md](https://github.com/Tencent/TencentOS-tiny/blob/master/doc/10.Porting_Manual_for_KEIL.md)。为了方便初始化MCU的外设，后续要继续使用STM32CubeMX软件，请确保安装了该软件；注：在系统移植成功后，工程可以进行线程任务切换，通过串口打印"hello world"，基础Keil工程代码准备完毕。
 - 准备Tensorflow Lite Micro组件。在主仓库中的 `TencentOS-tiny\components\ai\tflite_micro` 路径下，本次我们主要是要使用Tensorflow Lite Micro推理框架来实现行人检测任务，所以可以直接采用对应内核的lib库文件的方式来将其集成到系统中，在实际应用的过程中只需要编写调用有关的API即可以实现AI算法在MCU平台上的部署。
+- **如何制作lib库文件以及如何使能CMSIS-NN加速**请参考**Tensorflow Lite micro组建使用说明**: https://github.com/Tencent/TencentOS-tiny/blob/master/components/ai/tflite_micro/TFlite_Micro_Component_User_Guide.md
 
 ## **3.系统移植流程**：
 
