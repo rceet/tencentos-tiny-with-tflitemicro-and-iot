@@ -1,28 +1,20 @@
-# Tensorflow Lite Micro组件使用说明
-
-Github ID: [Derekduke](https://github.com/Derekduke)   E-mail:  dkeji627@gmail.com 
-
-Github ID: [QingChuanWS](https://github.com/QingChuanWS)  E-mail: bingshan45@163.com
-
-Github ID: [yangqings](https://github.com/yangqings)  E-mail: yangqingsheng12@outlook.com
-
 # 概述
 
-`Tensorflow Lite Micro` 是` TensorFlow Lite `针对MCU的实验性端口，专门用于在微控制器和其他只有几千字节内存的设备上运行机器学习模型。
+`Tensorflow Lite Micro` 是` TensorFlow Lite `针对AIOT的轻量级AI引擎，专门用于在微控制器和其他资源受限的设备上运行机器学习模型。
 
 # 1. 建立与转换模型
 
-由于嵌入式设备具有有限的 RAM 和存储空间，因此限制了深度学习模型的规模。同时，TensorFlow Lite Micro 目前只支持有限的一部分深度学习运算算子，因此并非所有的模型结构都是可行的。
+由于嵌入式设备存储空间有限，因此限制了深度学习的应用。同时考虑到平台算力以及算子支持等因素，因此在模型设计以及部署阶段需充分考虑硬件平台资源以及预期性能。
 
-本部分将介绍由 TensorFlow 模型转换为可在嵌入式设备中上运行的过程。本部分也概述了可支持的运算，并对设计与训练一个模型以使其符合内存限制给出了一些指导。
+本部分将介绍将TensorFlow模型转换为可在嵌入式设备上运行的模型的过程。
 
 ## 1.1 模型转换
 
-将一个已训练好的 TensorFlow 模型转换为可以在嵌入式设备中运行的Tensorflow Lite模型可以使用 [TensorFlow Lite 转换器 Python API](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。它能够将模型转换成 [`FlatBuffer`](https://google.github.io/flatbuffers/) 格式，减小模型规模，并修改模型以使用 TensorFlow Lite 支持的运算。
+将一个已训练好的TensorFlow模型转换为可以在嵌入式设备中运行的Tensorflow Lite模型可以使用 [TensorFlow Lite 转换器 Python API](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。它能够将模型转换成 [`FlatBuffer`](https://google.github.io/flatbuffers/) 格式，减小模型规模，并修改模型及算子以支持TensorFlow Lite运算。
 
 ### 1.1.1  量化
 
-为了获得尽可能小的模型规模，你应该考虑使用[训练后量化](https://tensorflow.google.cn/lite/performance/post_training_quantization)。它会降低你模型中数字的精度，从而减小模型规模。不过，这种操作可能会导致模型推理准确性的下降，对于小规模模型来说尤为如此, 所有我们需要在量化前后分析模型的准确性变换以确保这种损失在可接受范围内。
+为了获得尽可能小的模型，你应该考虑使用[训练后量化](https://tensorflow.google.cn/lite/performance/post_training_quantization)。它会降低你模型中数字的精度，从而减小模型规模，比如将FP32转化为Int8。不过，这种操作可能会导致模型推理准确性的下降，对于小规模模型来说尤为如此，所以我们需要在量化前后分析模型的准确性，以确保这种损失在可接受范围内。
 
 以下这段 Python 代码片段展示了如何使用预训练量化进行模型转换：
 
@@ -36,9 +28,9 @@ open("converted_model.tflite", "wb").write(tflite_quant_model)
 
 ### 1.1.2  转换为一个 C 数组
 
-许多微控制器平台没有本地文件系统的支持。从程序中使用一个模型最简单的方式是将其以一个 C 数组的形式并将其编译进你的程序。
+许多微控制器平台没有本地文件系统的支持。从程序中使用一个模型最简单的方式是将其转换为C数组并将其编译进你的程序。
 
-以下的 unix 命令会生成一个以 `char` 数组形式包含 TensorFlow Lite 模型的 C 源文件：
+以下的 unix 命令会生成一个包含 TensorFlow Lite 模型的 C 源文件，其中模型数据以 `char` 数组形式表现：
 
 ```bash
 xxd -i converted_model.tflite > model_data.cc
@@ -58,33 +50,33 @@ unsigned int converted_model_tflite_len = 18200;
 
 ## 1.2 模型结构与训练
 
-在设计一个面向微控制器的模型时，考虑模型的规模、工作负载，以及用到的运算是非常重要的。
+在设计一个面向微控制器的模型时，考虑模型的规模、工作负载，以及用到的算子是非常重要的。
 
 ### 1.2.1 模型规模
 
-一个模型必须在二进制和运行时方面都足够小，以使其可以和你程序的其他部分一起符合你目标设备的内存限制。
+一个模型必须在二进制和运行时方面都足够小，以使其可以和你程序的其他部分满足目标设备的内存限制。
 
-为了创建一个更小的模型，你可以在你的结构里使用更少和更小的层。然而，小规模的模型更易面临欠拟合问题。这意味着对于许多问题，尝试并使用符合内存限制的尽可能大规模的模型是有意义的。但是，使用更大规模的模型也会导致处理器工作负载的增加。
+为了创建一个更小的模型，你可以在模型设计中采用少而小的层。然而，小规模的模型更易导致欠拟合问题。这意味着对于许多应用，尝试并使用符合内存限制的尽可能大的模型是有意义的。但是，使用更大规模的模型也会导致处理器工作负载的增加。
 
-注：在一个 Cortex M3 上，面向微控制器的 TensorFlow Lite 的核心运行时占 16 KB。
+注：在一个Cortex M3上，TensorFlow Lite Micro的core runtime仅占约16 KB。
 
 ### 1.2.2 工作负载
 
-工作负载受到模型规模与复杂度的影响。大规模、复杂的模型可能会导致更高的功耗，根据实际的应用场景，这种情况所带来的功耗与热量的增加可能会成为一个问题。
+工作负载受到模型规模与复杂度的影响，大规模、复杂的模型可能会导致更高的功耗。在实际的应用场景中，功耗与热量的增加可能会带来其他问题。
 
 ### 1.2.3 运算支持
 
-面向微控制器的 TensorFlow Lite 目前仅支持有限的部分 TensorFlow 运算，这影响了可以运行的模型结构。我们正致力于在参考实现和针对特定结构的优化方面扩展运算支持。
+TensorFlow Lite Micro目前仅支持有限的TensorFlow算子，因此可运行的模型也有所限制。我们正致力于在参考实现和针对特定结构的优化方面扩展运算支持。Arm的CMSIS NN开源加速库也为算子的支持和优化提供了另一种可能。
 
 已支持的运算可以在文件 [`all_ops_resolver.cc`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/all_ops_resolver.cc) 中看到。
 
 ## 1.3 运行推断
 
-以下部分将介绍软件包自带语音历程中的 [main_functions.cc](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/person_detection_experimental/main_functions.cc) 文件并解释了它如何使用用于微控制器的 Tensorflow Lite 来运行推断。
+以下部分将介绍软件包自带语音历程中的 [main_functions.cc](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/person_detection_experimental/main_functions.cc) 文件并阐述了如何使用 Tensorflow Lite Micro来进行AI推理。
 
 ### 1.3.1 包含项
 
-要使用库，必须包含以下头文件：
+倒入依赖项：
 
 ```C++
 #include "tensorflow/lite/micro/kernels/micro_ops.h"
@@ -96,23 +88,23 @@ unsigned int converted_model_tflite_len = 18200;
 
 - [`micro_ops.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/kernels/micro_ops.h) 提供给解释器（interpreter）用于运行模型的操作。
 - [`micro_error_reporter.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/micro_error_reporter.h) 输出调试信息。
-- [`micro_interpreter.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/micro_interpreter.h) 包含处理和运行模型的代码。
-- [`schema_generated.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/schema/schema_generated.h) 包含 TensorFlow Lite [`FlatBuffer`](https://google.github.io/flatbuffers/) 模型文件格式的模式。
-- [`version.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/version.h) 提供 Tensorflow Lite 架构的版本信息。
+- [`micro_interpreter.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/micro_interpreter.h) Tensorflow Lite Micro解释器，用来运行我们的模型。
+- [`schema_generated.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/schema/schema_generated.h) 定义TensorFlow Lite [`FlatBuffer`](https://google.github.io/flatbuffers/) 数据结构。
+- [`version.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/version.h) 提供Tensorflow Lite架构的版本信息。
 
-示例还包括其他一些文件。以下这些是最重要的：
+示例还包括其他一些文件，比如：
 
 ```C++
 #include "tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h"
 #include "tensorflow/lite/micro/examples/micro_speech/micro_features/model.h"
 ```
 
-- [`model.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro_speech/micro_features/model.h) 包含存储为 `char` 数组的模型。阅读 [“构建与转换模型”](https://tensorflow.google.cn/lite/microcontrollers/build_convert)来了解如何将 Tensorflow Lite 模型转换为该格式。
+- [`model.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro_speech/micro_features/model.h) 将模型存储为 `char` 类型数组。阅读 [“构建与转换模型”](https://tensorflow.google.cn/lite/microcontrollers/build_convert)来了解如何将 Tensorflow Lite 模型转换为该格式。
 - [`micro_model_settings.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h) 定义与模型相关的各种常量。
 
 ### 1.3.2 设置日志记录
 
-要设置日志记录，需要使用一个指向 `tflite::MicroErrorReporter` 实例的指针来创建一个 `tflite::ErrorReporter` 指针：
+要记录日志，需要使用一个指向 `tflite::MicroErrorReporter` 实例的指针来创建一个 `tflite::ErrorReporter` 指针：
 
 ```C++
 tflite::MicroErrorReporter micro_error_reporter;
