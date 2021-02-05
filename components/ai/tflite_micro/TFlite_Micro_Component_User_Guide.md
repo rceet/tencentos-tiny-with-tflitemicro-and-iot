@@ -104,18 +104,18 @@ TensorFlow Lite Micro目前仅支持有限的TensorFlow算子，因此可运行�
 
 ### 1.3.2 设置日志记录
 
-要记录日志，需要使用一个指向 `tflite::MicroErrorReporter` 实例的指针来创建一个 `tflite::ErrorReporter` 指针：
+要记录日志，需要实例化 `tflite::MicroErrorReporter` 类：
 
 ```C++
 tflite::MicroErrorReporter micro_error_reporter;
 tflite::ErrorReporter* error_reporter = &micro_error_reporter;
 ```
 
-该变量被传递到解释器（interpreter）中，解释器允许它写日志。由于微控制器通常具有多种日志记录机制，`tflite::MicroErrorReporter` 的实现是为您的特定设备所定制的。
+该变量被传递到解释器（interpreter）中用于写日志。由于微控制器通常具有多种日志记录机制，因此 `tflite::MicroErrorReporter` 的实现会考虑到不同设备的差异性。
 
 ### 1.3.3 加载模型
 
-在以下代码中，模型是从一个 `char` 数组中实例化的，`g_tiny_conv_micro_features_model_data` （要了解其是如何构建的，请参见[“构建与转换模型”](ModelConvert.md)）。 随后我们检查模型来确保其架构版本与我们使用的版本所兼容：
+以下代码中，实例化的 `char` 数组中包含模型信息，`g_tiny_conv_micro_features_model_data` （要了解其是如何构建的，请参见[“构建与转换模型”](ModelConvert.md)）。 随后我们检查模型来确保其架构版本与我们使用的版本所兼容：
 
 ```C++
 const tflite::Model* model =
@@ -129,9 +129,9 @@ if (model->version() != TFLITE_SCHEMA_VERSION) {
 }
 ```
 
-### 1.3.4实例化操作解析器
+### 1.3.4实例化OP解析器
 
-解释器（interpreter）需要一个 [`micro_ops`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/kernels/micro_ops.h) 实例来访问 Tensorflow 操作。可以扩展此类以向您的项目添加自定义操作：
+解释器（interpreter）需要一个 [`micro_ops`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/kernels/micro_ops.h) 实例来访问 Tensorflow 操作。可以扩展此类来添加自定义操作：
 
 ```C++
 tflite::ops::micro::micro_op_resolver resolver;
@@ -139,7 +139,7 @@ tflite::ops::micro::micro_op_resolver resolver;
 
 ### 1.3.5 分配内存
 
-我们需要预先为输入、输出以及中间数组分配一定的内存。该预分配的内存是一个大小为 `tensor_arena_size` 的 `uint8_t` 数组，它被传递给 `tflite::SimpleTensorAllocator` 实例：
+我们需要预先为输入、输出以及中间变量分配一定的内存。该预分配的内存是一个大小为 `tensor_arena_size` 的 `uint8_t` 数组。它将会作为 `tflite::SimpleTensorAllocator` 实例化的参数：
 
 ```C++
 const int tensor_arena_size = 10 * 1024;
@@ -152,7 +152,7 @@ tflite::SimpleTensorAllocator tensor_allocator(tensor_arena,
 
 ### 1.3.6 实例化解释器（Interpreter）
 
-我们创建一个 `tflite::MicroInterpreter` 实例，传递给之前创建的变量：
+我们创建一个 `tflite::MicroInterpreter` 实例并传递相关变量：
 
 ```C++
 tflite::MicroInterpreter interpreter(model, resolver, &tensor_allocator,
