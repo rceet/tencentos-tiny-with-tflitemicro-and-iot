@@ -277,6 +277,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 ## 2. 将源文件加入 KEIL 工程并生成 .lib 库
 
+### 1. 添加文件 ###
 新建目标芯片的KEIL工程（本次示例以ARM Cortex M4为例），将 `Source` 目录下的 `tensorflow` 和 `third_party` 文件夹导入到KEIL工程根目录下，并添加 `tensorflow` 目录中除 `lite/micro/kernels` 以及 `lite/micro/tools` 文件以外的所有源文件（包含.c和.cc)，例如下图所示：
 
 <div align=center>
@@ -292,7 +293,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 **CMSIS NN是Arm在AI领域针对IOT设备开发神经网络加速库，其目的是为了让AI在算力和资源有限的设备上落地，更好的发挥Arm的生态优势。相关代码和文档已经开 (https://www.keil.com/pack/doc/CMSIS/NN/html/index.html)**
 
-### 1. 采用 CMSIS NN 生成 .lib 文件 ###
+#### 1) 采用 CMSIS NN 生成 .lib 文件 ####
 
 需要：
 
@@ -300,30 +301,32 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 2. 添加 `tensorflow/lite/micro/kernel/` 中的算子时，请不要添加 `add.cc`，`conv.cc`，`depthwise_conv.cc`，`softmax.cc`，`fully_connected.cc`，`pooling.cc`，`mul.cc` 源文件；
 3. 添加 `tensorflow/lite/micro/tools` 文件夹下的全部源文件。
 
-### 2. 采用 reference算子生成 .lib 文件 ###
+#### 2) 采用 reference算子生成 .lib 文件 ####
 
 需要:
 
 1. 添加 `tensorflow/lite/micro/kernel/` 中的全部算子；
 2. 无需添加 `tensorflow/lite/micro/tools` 文件夹下的源文件。
 
-同时采用compiler version 6编译器并关闭Microlib：
+### 2. 配制编译选项 ###
+
+同时采用 compiler version 6 编译器并关闭 Microlib ：
 
 <div align=center>
 <img src="image/编译器配置.png" width=80% />
 </div>
 
-选择编译为库并编辑库名为`tensorflow_lite_micro`：
+创建库并编辑库名 `tensorflow_lite_micro` ：
 
 <div align=center>
 <img src="image/编译目标为.lib.png" width=80% />
 </div>
 
-最后配置有关的宏、包含的文件路径和优化等级：
+配置有关的宏、包含的文件路径和优化等级：
 
 <div align=center>
 <img src="image/配置include和优化等级等.png" width=80% />
 </div>
 
-最后点击编译链接之后，即可在工程根目录的`Objects`文件夹下生成ARM Cortex M4对应的.lib库，其他内核型号的tflite_micro库以此类推。
+最后点击编译链接，即可在工程根目录的 `Objects` 文件夹下生成 ARM Cortex M4 对应的 .lib 库。其他内核型号的tflite_micro库以此类推。
 
