@@ -58,7 +58,7 @@ unsigned int converted_model_tflite_len = 18200;
 
 为了创建一个更小的模型，你可以在模型设计中采用少而小的层。然而，小规模的模型更易导致欠拟合问题。这意味着对于许多应用，尝试并使用符合内存限制的尽可能大的模型是有意义的。但是，使用更大规模的模型也会导致处理器工作负载的增加。
 
-注：在一个Cortex M3上，TensorFlow Lite Micro的core runtime仅占约16 KB。
+注：在一个 Cortex M3 上，TensorFlow Lite Micro的 core runtime 仅占约16 KB。
 
 ### 1.2.2 工作负载
 
@@ -66,7 +66,7 @@ unsigned int converted_model_tflite_len = 18200;
 
 ### 1.2.3 运算支持
 
-TensorFlow Lite Micro 目前仅支持有限的TensorFlow算子，因此可运行的模型也有所限制。我们正致力于在参考实现和针对特定结构的优化方面扩展运算支持。Arm 的 CMSIS NN 开源加速库也为算子的支持和优化提供了另一种可能。
+TensorFlow Lite Micro 目前仅支持有限的 TensorFlow 算子，因此可运行的模型也有所限制。我们正致力于在参考实现和针对特定结构的优化方面扩展运算支持。Arm 的 CMSIS NN 开源加速库也为算子的支持和优化提供了另一种可能。
 
 已支持的运算可以在文件 [`all_ops_resolver.cc`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/all_ops_resolver.cc) 中看到。
 
@@ -115,7 +115,7 @@ tflite::ErrorReporter* error_reporter = &micro_error_reporter;
 
 ### 1.3.3 加载模型
 
-以下代码中，实例化的 `char` 数组中包含模型信息，`g_tiny_conv_micro_features_model_data` （要了解其是如何构建的，请参见[“构建与转换模型”](ModelConvert.md)）。 随后我们检查模型来确保其架构版本与我们使用的版本所兼容：
+以下代码中，实例化的 `char` 数组中包含模型信息，`g_tiny_conv_micro_features_model_data` （要了解其是如何构建的，请参见[“构建与转换模型”](ModelConvert.md)。随后我们检查模型来确保其架构版本与我们使用的版本所兼容：
 
 ```C++
 const tflite::Model* model =
@@ -232,19 +232,19 @@ if (invoke_status != kTfLiteOk) {
 
 在示例的其他部分中，使用了一个更加复杂的算法来平滑多帧的识别结果。该部分在 [recognize_commands.h](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/micro_speech/recognize_commands.h) 中有所定义。在处理任何连续的数据流时，也可以使用相同的技术来提高可靠性和准确度。
 
-# 2. 制作tensorflow_lite_micro.lib
+# 2. 制作 tensorflow_lite_micro.lib
 
-## 2.1 获得Tensorflow Lite Micro库
+## 2.1 获得 Tensorflow Lite Micro 库
 
-构建库并从 TensorFlow master branch中运行测试，请执行以下命令：
+构建库并从 TensorFlow master branch 中运行测试，请执行以下命令：
 
-将 TensorFlow project下载到本地。
+将 TensorFlow project 下载到本地。
 
 ```
 git clone --depth 1 https://github.com/QingChuanWS/tensorflow.git
 ```
 
-注：由于Tensorflow官方仓库的更新速度较快，为了方便开发者学习.lib库的制作方法，所以作者将使用固定版本的Tensorflow制作组件。
+注：由于 Tensorflow 官方仓库的更新速度较快，为了方便开发者学习 .lib 库的制作方法，所以作者将使用固定版本的 Tensorflow 制作组件。
 
 进入上一步创建的目录。
 
@@ -277,8 +277,8 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 ## 2. 将源文件加入 KEIL 工程并生成 .lib 库
 
-### 2.1. 添加文件 ###
-新建目标芯片的 KEIL 工程（本次示例以ARM Cortex M4为例），将 `Source` 目录下的 `tensorflow` 和 `third_party` 文件夹导入到 KEIL 工程根目录下，并添加 `tensorflow` 目录中除 `lite/micro/kernels` 以及 `lite/micro/tools` 文件以外的所有源文件（包含.c和.cc)，例如下图所示：
+### 2.1 添加文件 ###
+新建目标芯片的 KEIL 工程（本次示例以 ARM Cortex M4 为例），将 `Source` 目录下的 `tensorflow` 和 `third_party` 文件夹导入到 KEIL 工程根目录下，并添加 `tensorflow` 目录中除 `lite/micro/kernels` 以及 `lite/micro/tools` 文件以外的所有源文件（包含 .c 和 .cc)，例如下图所示：
 
 <div align=center>
 <img src="image/lib文件目录.png" width=80% />
@@ -301,14 +301,14 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 2. 添加 `tensorflow/lite/micro/kernel/` 中的算子时，请不要添加 `add.cc`，`conv.cc`，`depthwise_conv.cc`，`softmax.cc`，`fully_connected.cc`，`pooling.cc`，`mul.cc` 源文件；
 3. 添加 `tensorflow/lite/micro/tools` 文件夹下的全部源文件。
 
-#### 2.1.2 采用 reference算子生成 .lib 文件 ####
+#### 2.1.2 采用 reference 算子生成 .lib 文件 ####
 
 需要:
 
 1. 添加 `tensorflow/lite/micro/kernel/` 中的全部算子；
 2. 无需添加 `tensorflow/lite/micro/tools` 文件夹下的源文件。
 
-### 2.2. 配制编译选项 ###
+### 2.2 配制编译选项 ###
 
 同时采用 compiler version 6 编译器并关闭 Microlib ：
 
