@@ -1,20 +1,20 @@
 # 概述
 
-`Tensorflow Lite Micro` 是` TensorFlow Lite `针对AIOT的轻量级AI引擎，专门用于在微控制器和其他资源受限的设备上运行机器学习模型。
+`Tensorflow Lite Micro` 是 `TensorFlow Lite` 针对AIOT的轻量级AI引擎，专门用于在微控制器和其他资源受限的设备上运行机器学习模型。
 
 # 1. 建立与转换模型
 
 由于嵌入式设备存储空间有限，因此限制了深度学习的应用。同时考虑到平台算力以及算子支持等因素，因此在模型设计以及部署阶段需充分考虑硬件平台资源以及预期性能。
 
-本部分将介绍将TensorFlow模型转换为可在嵌入式设备上运行的模型的过程。
+本部分将介绍将 TensorFlow 模型转换为可在嵌入式设备上运行的模型的过程。
 
 ## 1.1 模型转换
 
-将一个已训练好的TensorFlow模型转换为可以在嵌入式设备中运行的Tensorflow Lite模型可以使用 [TensorFlow Lite 转换器 Python API](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。它能够将模型转换成 [`FlatBuffer`](https://google.github.io/flatbuffers/) 格式，减小模型规模，并修改模型及算子以支持TensorFlow Lite运算。
+将一个已训练好的 TensorFlow 模型转换为可以在嵌入式设备中运行的 Tensorflow Lite 模型可以使用 [TensorFlow Lite 转换器 Python API](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。它能够将模型转换成 [`FlatBuffer`](https://google.github.io/flatbuffers/) 格式，减小模型规模，并修改模型及算子以支持TensorFlow Lite运算。
 
 ### 1.1.1  量化
 
-为了获得尽可能小的模型，你应该考虑使用[训练后量化](https://tensorflow.google.cn/lite/performance/post_training_quantization)。它会降低你模型中数字的精度，从而减小模型规模，比如将FP32转化为Int8。不过，这种操作可能会导致模型推理准确性的下降，对于小规模模型来说尤为如此，所以我们需要在量化前后分析模型的准确性，以确保这种损失在可接受范围内。
+为了获得尽可能小的模型，你应该考虑使用[训练后量化](https://tensorflow.google.cn/lite/performance/post_training_quantization)。它会降低你模型中数字的精度，从而减小模型规模，比如将FP32 转化为 Int8。不过，这种操作可能会导致模型推理准确性的下降，对于小规模模型来说尤为如此，所以我们需要在量化前后分析模型的准确性，以确保这种损失在可接受范围内。
 
 以下这段 Python 代码片段展示了如何使用预训练量化进行模型转换：
 
@@ -28,7 +28,7 @@ open("converted_model.tflite", "wb").write(tflite_quant_model)
 
 ### 1.1.2  转换为一个 C 数组
 
-许多微控制器平台没有本地文件系统的支持。从程序中使用一个模型最简单的方式是将其转换为C数组并将其编译进你的程序。
+许多微控制器平台没有本地文件系统的支持。从程序中使用一个模型最简单的方式是将其转换为 C 数组并将其编译进你的程序。
 
 以下的 unix 命令会生成一个包含 TensorFlow Lite 模型的 C 源文件，其中模型数据以 `char` 数组形式表现：
 
@@ -66,13 +66,13 @@ unsigned int converted_model_tflite_len = 18200;
 
 ### 1.2.3 运算支持
 
-TensorFlow Lite Micro目前仅支持有限的TensorFlow算子，因此可运行的模型也有所限制。我们正致力于在参考实现和针对特定结构的优化方面扩展运算支持。Arm的CMSIS NN开源加速库也为算子的支持和优化提供了另一种可能。
+TensorFlow Lite Micro 目前仅支持有限的TensorFlow算子，因此可运行的模型也有所限制。我们正致力于在参考实现和针对特定结构的优化方面扩展运算支持。Arm 的 CMSIS NN 开源加速库也为算子的支持和优化提供了另一种可能。
 
 已支持的运算可以在文件 [`all_ops_resolver.cc`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/all_ops_resolver.cc) 中看到。
 
 ## 1.3 运行推断
 
-以下部分将介绍软件包自带语音历程中的 [main_functions.cc](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/person_detection_experimental/main_functions.cc) 文件并阐述了如何使用 Tensorflow Lite Micro来进行AI推理。
+以下部分将介绍软件包自带语音历程中的 [main_functions.cc](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/person_detection_experimental/main_functions.cc) 文件并阐述了如何使用 Tensorflow Lite Micro 来进行 AI 推理。
 
 ### 1.3.1 包含项
 
@@ -88,9 +88,9 @@ TensorFlow Lite Micro目前仅支持有限的TensorFlow算子，因此可运行�
 
 - [`micro_ops.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/kernels/micro_ops.h) 提供给解释器（interpreter）用于运行模型的操作。
 - [`micro_error_reporter.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/micro_error_reporter.h) 输出调试信息。
-- [`micro_interpreter.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/micro_interpreter.h) Tensorflow Lite Micro解释器，用来运行我们的模型。
-- [`schema_generated.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/schema/schema_generated.h) 定义TensorFlow Lite [`FlatBuffer`](https://google.github.io/flatbuffers/) 数据结构。
-- [`version.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/version.h) 提供Tensorflow Lite架构的版本信息。
+- [`micro_interpreter.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/micro_interpreter.h) Tensorflow Lite Micro 解释器，用来运行我们的模型。
+- [`schema_generated.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/schema/schema_generated.h) 定义 TensorFlow Lite [`FlatBuffer`](https://google.github.io/flatbuffers/) 数据结构。
+- [`version.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/version.h) 提供 Tensorflow Lite 架构的版本信息。
 
 示例还包括其他一些文件，比如：
 
@@ -129,7 +129,7 @@ if (model->version() != TFLITE_SCHEMA_VERSION) {
 }
 ```
 
-### 1.3.4实例化OP解析器
+### 1.3.4实例化 OP 解析器
 
 解释器（interpreter）需要一个 [`micro_ops`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/kernels/micro_ops.h) 实例来访问 Tensorflow 操作。可以扩展此类来添加自定义操作：
 
@@ -273,12 +273,12 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 | --tensorflow_path  | 下载的tensorflow仓库的根目录（绝对路径）  |
 | --tflitemicro_path | 生成的tensorflow lite micro路径（绝对路径） |
 
-脚本成功运行后打印 `--tensorflow lite micro source file extract successful--` 信息，并在对应的 `tflitemicro_path` 路径下生成`Source`文件夹存放 Tensorflow Lite Micro 源文件。
+脚本成功运行后打印 `--tensorflow lite micro source file extract successful--` 信息，并在对应的 `tflitemicro_path` 路径下生成 `Source` 文件夹存放 Tensorflow Lite Micro 源文件。
 
 ## 2. 将源文件加入 KEIL 工程并生成 .lib 库
 
 ### 1. 添加文件 ###
-新建目标芯片的KEIL工程（本次示例以ARM Cortex M4为例），将 `Source` 目录下的 `tensorflow` 和 `third_party` 文件夹导入到KEIL工程根目录下，并添加 `tensorflow` 目录中除 `lite/micro/kernels` 以及 `lite/micro/tools` 文件以外的所有源文件（包含.c和.cc)，例如下图所示：
+新建目标芯片的 KEIL 工程（本次示例以ARM Cortex M4为例），将 `Source` 目录下的 `tensorflow` 和 `third_party` 文件夹导入到 KEIL 工程根目录下，并添加 `tensorflow` 目录中除 `lite/micro/kernels` 以及 `lite/micro/tools` 文件以外的所有源文件（包含.c和.cc)，例如下图所示：
 
 <div align=center>
 <img src="image/lib文件目录.png" width=80% />
@@ -328,5 +328,5 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 <img src="image/配置include和优化等级等.png" width=80% />
 </div>
 
-最后点击编译链接，即可在工程根目录的 `Objects` 文件夹下生成 ARM Cortex M4 对应的 .lib 库。其他内核型号的tflite_micro库以此类推。
+最后点击编译链接，即可在工程根目录的 `Objects` 文件夹下生成 ARM Cortex M4 对应的 .lib 库。其他内核型号的 tflite_micro 库以此类推。
 
