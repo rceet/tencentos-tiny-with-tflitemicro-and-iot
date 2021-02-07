@@ -4,17 +4,17 @@
 
 # 1. 建立与转换模型
 
-由于嵌入式设备存储空间有限，因此限制了深度学习的应用。同时考虑到平台算力以及算子支持等因素，因此在模型设计以及部署阶段需充分考虑硬件平台资源以及预期性能。
+由于嵌入式设备存储空间有限，因此限制了深度学习的应用，同时考虑到平台算力以及算子支持等因素，因此在模型设计以及部署阶段需充分了解硬件平台资源以及预期性能。
 
 本部分将介绍将 TensorFlow 模型转换为可在嵌入式设备上运行的模型的过程。
 
 ## 1.1 模型转换
 
-将一个已训练好的 TensorFlow 模型转换为可以在嵌入式设备中运行的 Tensorflow Lite 模型可以使用 [TensorFlow Lite 转换器 Python API](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。它能够将模型转换成 [`FlatBuffer`](https://google.github.io/flatbuffers/) 格式，减小模型规模，并修改模型及算子以支持TensorFlow Lite运算。
+将一个已训练好的 TensorFlow 模型转换为可以在嵌入式设备中运行的 Tensorflow Lite 模型可以使用 [TensorFlow Lite 转换器 Python API](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。它能够将模型转换成 [`FlatBuffer`](https://google.github.io/flatbuffers/) 格式，减小模型规模，并修改模型及算子以支持 TensorFlow Lite 运算。
 
 ### 1.1.1  量化
 
-为了获得尽可能小的模型，某些情况下可以考虑使用 [训练后量化](https://tensorflow.google.cn/lite/performance/post_training_quantization) 。它会降低模型中数字的精度，从而减小模型规模，比如将 FP32 转化为 Int8。不过，这种操作可能会导致模型推理准确性的下降，对于小规模模型来说尤为如此，所以我们需要在量化前后分析模型的准确性，以确保这种损失在可接受范围内。
+为了获得尽可能小的模型，某些情况下可以考虑使用 [训练后量化](https://tensorflow.google.cn/lite/performance/post_training_quantization) 。它会降低模型中数字的精度，从而减小模型规模，比如将 FP32 转化为 Int8。不过，这种操作可能会导致模型推理准确性的下降，对于小规模模型尤为如此，所以我们需要在量化前后分析模型的准确性，以确保这种损失在可接受范围内。
 
 以下这段 Python 代码片段展示了如何使用预训练量化进行模型转换：
 
@@ -28,7 +28,7 @@ open("converted_model.tflite", "wb").write(tflite_quant_model)
 
 ### 1.1.2  将模型文件转换为一个 C 数组
 
-许多微控制器平台没有本地文件系统的支持。从程序中使用一个模型最简单的方式是将其转换为 C 数组并将其编译进你的程序。
+许多微控制器平台没有本地文件系统，从程序中使用一个模型最简单的方式是将其转换为 C 数组并将其编译进应用程序。
 
 以下的 unix 命令会生成一个包含 TensorFlow Lite 模型的 C 源文件，其中模型数据以 `char` 数组形式表现：
 
@@ -46,33 +46,33 @@ unsigned char converted_model_tflite[] = {
 unsigned int converted_model_tflite_len = 18200;
 ```
 
-在生成了此文件之后，你可以将它包含到你的程序中。在嵌入式平台上，我们需要将该数组声明为 `const` 类型以获得更好的内存效率。
+生成此文件后，你可以将其包含到程序中。在嵌入式平台上，我们需要将该数组声明为 `const` 类型以获得更好的内存效率。
 
 ## 1.2 模型结构与训练
 
-在设计一个面向微控制器的模型时，考虑模型的规模、工作负载，以及模型所使用到的算子是非常重要的。
+在设计一个面向微控制器的模型时，考虑模型的规模、工作负载以及模型所使用到的算子是非常重要的。
 
 ### 1.2.1 模型规模
 
-一个模型必须在二进制和运行时方面都足够小，以使其可以和你程序的其他部分满足目标设备的内存限制。
+一个模型必须在二进制和运行时方面都足够小，以使其编译进应用程序后满足目标设备的内存限制。
 
-为了创建一个更小的模型，你可以在模型设计中采用少而小的层。然而，小规模的模型更易导致欠拟合问题。这意味着对于许多应用，尝试并使用符合内存限制的尽可能大的模型是有意义的。但是，使用更大规模的模型也会导致处理器工作负载的增加。
+为了创建一个更小的模型，你可以在模型设计中采用少而小的层。然而，小规模的模型更易导致欠拟合问题。这意味着对于许多应用，尝试并使用符合内存限制的尽可能大的模型是有意义的。但是，使用更大规模的模型也会增加处理器工作负载。
 
-注：在一个 Cortex M3 上，TensorFlow Lite Micro的 core runtime 仅占约16 KB。
+注：在一个 Cortex M3 上，TensorFlow Lite Micro 的 core runtime 仅占约16 KB。
 
 ### 1.2.2 工作负载
 
-工作负载受到模型规模与复杂度的影响，大规模、复杂的模型可能会导致更高的功耗。在实际的应用场景中，功耗与热量的增加可能会带来其他问题。
+工作负载受到模型规模，结构与复杂度的影响，大规模、复杂的模型可能会导致更高的功耗。在实际的应用场景中，功耗与热量的增加可能会带来其他问题。
 
-### 1.2.3 运算支持
+### 1.2.3 算子支持
 
-TensorFlow Lite Micro 目前仅支持有限的 TensorFlow 算子，因此可运行的模型也有所限制。我们正致力于在参考实现和针对特定结构的优化方面扩展运算支持。Arm 的 CMSIS-NN 开源加速库也为算子的支持和优化提供了另一种可能。
+TensorFlow Lite Micro 目前仅支持有限的 TensorFlow 算子，因此可运行的模型也有所限制。谷歌正致力于在参考实现和针对特定结构的优化方面扩展算子支持。Arm 的 CMSIS-NN 开源加速库也为算子的支持和优化提供了另一种可能。
 
-已支持的运算可以在文件 [`all_ops_resolver.cc`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/all_ops_resolver.cc) 中看到。
+已支持的算子在文件 [`all_ops_resolver.cc`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/all_ops_resolver.cc) 中列出。
 
 ## 1.3 运行推断
 
-以下部分将介绍软件包自带语音历程中的 [main_functions.cc](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/person_detection_experimental/main_functions.cc) 文件并阐述了如何使用 Tensorflow Lite Micro 来进行 AI 推理。
+以下部分将介绍软件包自带语音例程中的 [main_functions.cc](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/person_detection_experimental/main_functions.cc) 文件，并阐述了如何使用 Tensorflow Lite Micro 来进行 AI 推理。
 
 ### 1.3.1 包含项
 
