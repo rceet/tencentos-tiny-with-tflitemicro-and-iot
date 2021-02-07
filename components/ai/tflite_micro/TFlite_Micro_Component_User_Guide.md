@@ -273,9 +273,9 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 脚本成功运行后打印 `--tensorflow lite micro source file extract successful--` 信息，并在对应的 `tflitemicro_path` 路径下生成 `Source` 文件夹存放 Tensorflow Lite Micro 源文件。
 
-## 2. 将源文件加入 KEIL 工程并生成 .lib 库
+## 2.2 将源文件加入 KEIL 工程并生成 .lib 库
 
-### 2.1 添加文件 ###
+### 2.2.1 添加文件 ###
 新建目标芯片的 KEIL 工程（本次示例以 ARM Cortex M4 为例），将 `Source` 目录下的 `tensorflow` 和 `third_party` 文件夹导入到 KEIL 工程根目录下，并添加 `tensorflow` 目录中除 `lite/micro/kernels` 以及 `lite/micro/tools` 文件以外的所有源文件（包含 .c 和 .cc)，例如下图所示：
 
 <div align=center>
@@ -291,7 +291,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 **注：CMSIS-NN 是 Arm 在 AI 领域针对 IOT 设备开发神经网络加速库，其目的是为了让 AI 在算力和资源有限的设备上落地，更好的发挥 Arm 的生态优势。相关代码和文档已经开源 (https://www.keil.com/pack/doc/CMSIS/NN/html/index.html) 。在 Tensorflow Lite Micro 框架下基于 CMSIS-NN 加速库设计的 CMSIS-NN 算子与 reference 算子的性能对比可参考[附录](./TFlite_Micro_Component_User_Guide.md#%E9%99%84%E5%BD%95cmsis-nn-%E5%AF%B9-tensorflow-lite-micro-%E7%9A%84%E8%BF%90%E7%AE%97%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96) 。**
 
-#### 2.1.1 采用 CMSIS-NN 生成 .lib 文件 ####
+#### 2.2.1.1 采用 CMSIS-NN 生成 .lib 文件 ####
 
 需要：
 
@@ -299,14 +299,14 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 2. 添加 `tensorflow/lite/micro/kernel/` 中的算子时，请不要添加 `add.cc`，`conv.cc`，`depthwise_conv.cc`，`softmax.cc`，`fully_connected.cc`，`pooling.cc`，`mul.cc` 源文件；
 3. 添加 `tensorflow/lite/micro/tools` 文件夹下的全部源文件。
 
-#### 2.1.2 采用 reference 算子生成 .lib 文件 ####
+#### 2.2.1.2 采用 reference 算子生成 .lib 文件 ####
 
 需要:
 
 1. 添加 `tensorflow/lite/micro/kernel/` 中的全部算子；
 2. 无需添加 `tensorflow/lite/micro/tools` 文件夹下的源文件。
 
-### 2.2 配制编译选项 ###
+### 2.2.2 配制编译选项 ###
 
 采用 compiler version 6 编译器并关闭 Microlib ：
 
