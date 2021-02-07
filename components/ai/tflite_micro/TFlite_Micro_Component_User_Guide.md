@@ -1,6 +1,6 @@
 # 概述
 
-`Tensorflow Lite Micro` 是 `TensorFlow Lite` 针对AIOT的轻量级AI引擎，专门用于在微控制器和其他资源受限的设备上运行机器学习模型。
+`Tensorflow Lite Micro` 是 `TensorFlow Lite` 针对 AIOT 的轻量级 AI 引擎，专门用于在微控制器和其他资源受限的设备上运行机器学习模型。
 
 # 1. 建立与转换模型
 
@@ -14,7 +14,7 @@
 
 ### 1.1.1  量化
 
-为了获得尽可能小的模型，你应该考虑使用[训练后量化](https://tensorflow.google.cn/lite/performance/post_training_quantization)。它会降低你模型中数字的精度，从而减小模型规模，比如将FP32 转化为 Int8。不过，这种操作可能会导致模型推理准确性的下降，对于小规模模型来说尤为如此，所以我们需要在量化前后分析模型的准确性，以确保这种损失在可接受范围内。
+为了获得尽可能小的模型，某些情况下可以考虑使用 [训练后量化](https://tensorflow.google.cn/lite/performance/post_training_quantization) 。它会降低模型中数字的精度，从而减小模型规模，比如将 FP32 转化为 Int8。不过，这种操作可能会导致模型推理准确性的下降，对于小规模模型来说尤为如此，所以我们需要在量化前后分析模型的准确性，以确保这种损失在可接受范围内。
 
 以下这段 Python 代码片段展示了如何使用预训练量化进行模型转换：
 
@@ -26,7 +26,7 @@ tflite_quant_model = converter.convert()
 open("converted_model.tflite", "wb").write(tflite_quant_model)
 ```
 
-### 1.1.2  转换为一个 C 数组
+### 1.1.2  将模型文件转换为一个 C 数组
 
 许多微控制器平台没有本地文件系统的支持。从程序中使用一个模型最简单的方式是将其转换为 C 数组并将其编译进你的程序。
 
@@ -46,11 +46,11 @@ unsigned char converted_model_tflite[] = {
 unsigned int converted_model_tflite_len = 18200;
 ```
 
-在生成了此文件之后，你可以将它包含到你的程序。在嵌入式平台上，我们需要将该数组声明为 `const` 类型以获得更好的内存效率。
+在生成了此文件之后，你可以将它包含到你的程序中。在嵌入式平台上，我们需要将该数组声明为 `const` 类型以获得更好的内存效率。
 
 ## 1.2 模型结构与训练
 
-在设计一个面向微控制器的模型时，考虑模型的规模、工作负载，以及用到的算子是非常重要的。
+在设计一个面向微控制器的模型时，考虑模型的规模、工作负载，以及模型所使用到的算子是非常重要的。
 
 ### 1.2.1 模型规模
 
@@ -66,17 +66,15 @@ unsigned int converted_model_tflite_len = 18200;
 
 ### 1.2.3 运算支持
 
-TensorFlow Lite Micro 目前仅支持有限的 TensorFlow 算子，因此可运行的模型也有所限制。我们正致力于在参考实现和针对特定结构的优化方面扩展运算支持。Arm 的 CMSIS NN 开源加速库也为算子的支持和优化提供了另一种可能。
+TensorFlow Lite Micro 目前仅支持有限的 TensorFlow 算子，因此可运行的模型也有所限制。我们正致力于在参考实现和针对特定结构的优化方面扩展运算支持。Arm 的 CMSIS-NN 开源加速库也为算子的支持和优化提供了另一种可能。
 
-已支持的运算可以在文件 [`all_ops_resolver.cc`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/all_ops_resolver.cc) 中看到。
+已支持的运算可以在文件 [`all_ops_resolver.cc`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/all_ops_resolver.cc) 中看到。
 
 ## 1.3 运行推断
 
-以下部分将介绍软件包自带语音历程中的 [main_functions.cc](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/person_detection_experimental/main_functions.cc) 文件并阐述了如何使用 Tensorflow Lite Micro 来进行 AI 推理。
+以下部分将介绍软件包自带语音历程中的 [main_functions.cc](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/person_detection_experimental/main_functions.cc) 文件并阐述了如何使用 Tensorflow Lite Micro 来进行 AI 推理。
 
 ### 1.3.1 包含项
-
-倒入依赖项：
 
 ```C++
 #include "tensorflow/lite/micro/kernels/micro_ops.h"
@@ -86,21 +84,21 @@ TensorFlow Lite Micro 目前仅支持有限的 TensorFlow 算子，因此可运�
 #include "tensorflow/lite/version.h"
 ```
 
-- [`micro_ops.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/kernels/micro_ops.h) 提供给解释器（interpreter）用于运行模型的操作。
-- [`micro_error_reporter.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/micro_error_reporter.h) 输出调试信息。
-- [`micro_interpreter.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/micro_interpreter.h) Tensorflow Lite Micro 解释器，用来运行我们的模型。
-- [`schema_generated.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/schema/schema_generated.h) 定义 TensorFlow Lite [`FlatBuffer`](https://google.github.io/flatbuffers/) 数据结构。
-- [`version.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/version.h) 提供 Tensorflow Lite 架构的版本信息。
+- [`micro_ops.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/kernels/micro_ops.h) 提供给解释器（interpreter）用于运行模型的操作。
+- [`micro_error_reporter.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/micro_error_reporter.h) 输出调试信息。
+- [`micro_interpreter.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/micro_interpreter.h) Tensorflow Lite Micro 解释器，用来运行我们的模型。
+- [`schema_generated.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/schema/schema_generated.h) 定义 TensorFlow Lite [`FlatBuffer`](https://google.github.io/flatbuffers/) 数据结构。
+- [`version.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/version.h) 提供 Tensorflow Lite 架构的版本信息。
 
-示例还包括其他一些文件，比如：
+示例中还包括其他一些文件，比如：
 
 ```C++
 #include "tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h"
 #include "tensorflow/lite/micro/examples/micro_speech/micro_features/model.h"
 ```
 
-- [`model.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro_speech/micro_features/model.h) 将模型存储为 `char` 类型数组。阅读 [“构建与转换模型”](https://tensorflow.google.cn/lite/microcontrollers/build_convert)来了解如何将 Tensorflow Lite 模型转换为该格式。
-- [`micro_model_settings.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h) 定义与模型相关的各种常量。
+- [`model.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/micro_speech/micro_features/model.h) 将模型存储为 `char` 类型数组。阅读 [“构建与转换模型”](https://tensorflow.google.cn/lite/microcontrollers/build_convert)来了解如何将 Tensorflow Lite 模型转换为该格式。
+- [`micro_model_settings.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h) 定义与模型相关的各种常量。
 
 ### 1.3.2 设置日志记录
 
@@ -111,11 +109,11 @@ tflite::MicroErrorReporter micro_error_reporter;
 tflite::ErrorReporter* error_reporter = &micro_error_reporter;
 ```
 
-该变量被传递到解释器（interpreter）中用于写日志。由于微控制器通常具有多种日志记录机制，因此 `tflite::MicroErrorReporter` 的实现会考虑到不同设备的差异性。
+该对象被传递到解释器（interpreter）中用于记录日志。由于微控制器通常具有多种日志记录机制，因此 `tflite::MicroErrorReporter` 在实现上考虑了不同设备的差异性。
 
 ### 1.3.3 加载模型
 
-以下代码中，实例化的 `char` 数组中包含模型信息，`g_tiny_conv_micro_features_model_data` （要了解其是如何构建的，请参见[“构建与转换模型”](ModelConvert.md)。随后我们检查模型来确保其架构版本与我们使用的版本所兼容：
+在以下代码中，实例化的 `char` 数组中包含了模型信息，`g_tiny_conv_micro_features_model_data` （要了解其是如何构建的，请参见 [“构建与转换模型”](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。随后我们检查模型来确保其架构版本与我们使用的版本所兼容：
 
 ```C++
 const tflite::Model* model =
@@ -131,7 +129,7 @@ if (model->version() != TFLITE_SCHEMA_VERSION) {
 
 ### 1.3.4实例化 OP 解析器
 
-解释器（interpreter）需要一个 [`micro_ops`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/kernels/micro_ops.h) 实例来访问 Tensorflow 操作。可以扩展此类来添加自定义操作：
+解释器（interpreter）需要一个 [`micro_ops`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/kernels/micro_ops.h) 实例来访问 Tensorflow 操作。可以扩展此类来添加自定义操作：
 
 ```C++
 tflite::ops::micro::micro_op_resolver resolver;
@@ -174,15 +172,14 @@ if ((model_input->dims->size != 4) || (model_input->dims->data[0] != 1) ||
 }
 ```
 
-在这个代码段中，变量 `kFeatureSliceCount` 和 `kFeatureSliceSize` 与输入属性相关，其定义在 [`micro_model_settings.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h) 中。枚举值 `kTfLiteUInt8` 是对 Tensorflow Lite 某一数据类型的引用，其定义在 [`common.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/c/common.h) 中。
+在这个代码段中，变量 `kFeatureSliceCount` 和 `kFeatureSliceSize` 与输入属性相关，其定义在 [`micro_model_settings.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h) 中。枚举值 `kTfLiteUInt8` 是对 Tensorflow Lite 某一数据类型的引用，其定义在 [`common.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/c/common.h) 中。
 
 ### 1.3.8 生成特征
 
-微控制器的音频输入作为输入到模型中的数据。[`feature_provider.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/micro_speech/feature_provider.h) 中定义的 `FeatureProvider` 类捕获音频并将其转换为一组特征集合。当该类被实例化时，我们将获取的 `TfLiteTensor` 以及 `FeatureProvider` 作为参数，填充输入数据用于模型运算：
+微控制器的音频输入作为输入到模型中的数据。[`feature_provider.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/micro_speech/feature_provider.h) 中定义的 `FeatureProvider` 类捕获音频并将其转换为一组特征集合。当该类被实例化时，我们将获取的 `TfLiteTensor` 以及 `FeatureProvider` 作为参数，填充输入数据用于模型运算：
 
 ```C++
-  FeatureProvider feature_provider(kFeatureElementCount,
-                                   model_input->data.uint8);
+FeatureProvider feature_provider(kFeatureElementCount, model_input->data.uint8);
 ```
 
 `FeatureProvider` 将计算最近一秒的音频，生成一组特征后填充输入张量：
@@ -208,7 +205,7 @@ if (invoke_status != kTfLiteOk) {
 }
 ```
 
-通过检查返回值 `TfLiteStatus` 来确定运行是否成功。在 [`common.h`](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/c/common.h) 中定义的 `TfLiteStatus` 的值有 `kTfLiteOk` 和 `kTfLiteError`。
+通过检查返回值 `TfLiteStatus` 来确定运行是否成功。在 [`common.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/c/common.h) 中定义的 `TfLiteStatus` 的值有 `kTfLiteOk` 和 `kTfLiteError`。
 
 ### 1.3.10 获取输出
 
@@ -217,20 +214,20 @@ if (invoke_status != kTfLiteOk) {
 在示例中，输出是一个数组，表示输入属于不同类别（“是”（yes）、“否”（no）、“未知”（unknown）以及“静默”（silence））的概率。由于它们是按照集合顺序排列的，我们可以使用简单的逻辑来确定概率最高的类别：
 
 ```C++
-    TfLiteTensor* output = interpreter.output(0);
-    uint8_t top_category_score = 0;
-    int top_category_index;
-    for (int category_index = 0; category_index < kCategoryCount;
-         ++category_index) {
-      const uint8_t category_score = output->data.uint8[category_index];
-      if (category_score > top_category_score) {
+TfLiteTensor* output = interpreter.output(0);
+uint8_t top_category_score = 0;
+int top_category_index;
+for (int category_index = 0; category_index < kCategoryCount;
+     ++category_index) {
+    const uint8_t category_score = output->data.uint8[category_index];
+    if (category_score > top_category_score) {
         top_category_score = category_score;
         top_category_index = category_index;
-      }
     }
+}
 ```
 
-在示例的其他部分中，使用了一个更加复杂的算法来平滑多帧的识别结果。该部分在 [recognize_commands.h](https://github.com/QingChuanWS/tensorflow/tree/master/tensorflow/lite/micro/examples/micro_speech/recognize_commands.h) 中有所定义。在处理任何连续的数据流时，也可以使用相同的技术来提高可靠性和准确度。
+在示例的其他部分中，使用了一个更加复杂的算法来平滑多帧的识别结果。该部分在 [recognize_commands.h](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/micro_speech/recognize_commands.h) 中有所定义。在处理任何连续的数据流时，也可以使用相同的技术来提高可靠性和准确度。
 
 # 2. 制作 tensorflow_lite_micro.lib
 
@@ -238,17 +235,18 @@ if (invoke_status != kTfLiteOk) {
 
 构建库并从 TensorFlow master branch 中运行测试，请执行以下命令：
 
-将 TensorFlow project 下载到本地。
+将 TensorFlow project 下载到本地，在终端中输入以下命令：
 
-```
+```bash
 git clone --depth 1 https://github.com/QingChuanWS/tensorflow.git
+git checkout 5e0ed38eb746f3a86463f19bcf7138a959ddb2d4
 ```
 
-注：由于 Tensorflow 官方仓库的更新速度较快，为了方便开发者学习 .lib 库的制作方法，所以作者将使用固定版本的 Tensorflow 制作组件。
+注：进行 checkout 的原因是由于 Tensorflow 官方仓库的更新速度较快，为了方便开发者学习 .lib 库的制作方法，作者将使用上述版本来进行演示，开发者如果在实际操作过程中出现问题的话也可以通过 [此链接](https://github.com/QingChuanWS/tensorflow) 直接获得作者所使用的Tensorflow工程。
 
-进入上一步创建的目录。
+进入 clone 好的仓库：
 
-```
+```bash
 cd tensorflow
 ```
 
@@ -258,7 +256,7 @@ cd tensorflow
 
 要在 Make 中生成项目，请使用如下指令：
 
-```
+```bash
 make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 ```
 
@@ -291,9 +289,9 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 <img src="image/cmsis和reference.png" width=80% />
 </div>
 
-**CMSIS NN是Arm在AI领域针对IOT设备开发神经网络加速库，其目的是为了让AI在算力和资源有限的设备上落地，更好的发挥Arm的生态优势。相关代码和文档已经开 (https://www.keil.com/pack/doc/CMSIS/NN/html/index.html)**
+**注：CMSIS-NN 是 Arm 在 AI 领域针对 IOT 设备开发神经网络加速库，其目的是为了让 AI 在算力和资源有限的设备上落地，更好的发挥 Arm 的生态优势。相关代码和文档已经开源 (https://www.keil.com/pack/doc/CMSIS/NN/html/index.html) 。在 Tensorflow Lite Micro 框架下基于 CMSIS-NN 加速库设计的 CMSIS-NN 算子与 reference 算子的性能对比可参考[附录](./TFlite_Micro_Component_User_Guide.md#%E9%99%84%E5%BD%95cmsis-nn-%E5%AF%B9-tensorflow-lite-micro-%E7%9A%84%E8%BF%90%E7%AE%97%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96) 。**
 
-#### 2.1.1 采用 CMSIS NN 生成 .lib 文件 ####
+#### 2.1.1 采用 CMSIS-NN 生成 .lib 文件 ####
 
 需要：
 
@@ -310,23 +308,35 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 ### 2.2 配制编译选项 ###
 
-同时采用 compiler version 6 编译器并关闭 Microlib ：
+采用 compiler version 6 编译器并关闭 Microlib ：
 
 <div align=center>
 <img src="image/编译器配置.png" width=80% />
 </div>
 
-创建库并编辑库名 `tensorflow_lite_micro` ：
+选择 Create Library 选项并修改 .lib 库名为： `tensorflow_lite_micro` 
 
 <div align=center>
 <img src="image/编译目标为.lib.png" width=80% />
 </div>
 
-配置有关的宏、包含的文件路径和优化等级：
+配置有关的宏、包含的头文件路径并设置代码优化等级：
 
 <div align=center>
 <img src="image/配置include和优化等级等.png" width=80% />
 </div>
 
-最后点击编译链接，即可在工程根目录的 `Objects` 文件夹下生成 ARM Cortex M4 对应的 .lib 库。其他内核型号的 tflite_micro 库以此类推。
+最后点击编译链接选项，即可在工程根目录的 `Objects` 文件夹下生成 ARM Cortex M4 对应的 .lib 库。其他内核型号的 tflite_micro 库以此类推。
 
+## 附录：CMSIS-NN 对 Tensorflow Lite Micro 的运算性能优化
+
+- 硬件平台：Necluo STM32L496ZG
+- 测试输入图片：`tensorflow\lite\micro\tools\make\downloads\person_model_int8` 目录中 `person_image_data.cc` 和 `no_person_image_data.cc` 保存的 96 * 96 pixels ( uint_8 ) 灰度图。
+- 单次执行和 10 次累计执行的测试结果如下：
+
+|                      Case                      |   Disable ARM-CMSIS-NN   |   Enable ARM-CMSIS-NN   | Improvement |
+| :--------------------------------------------: | :----------------------: | :------------------: | :---------: |
+|          Initialize_Benchmark_Runner           |     65 ticks (65 ms)     |   66 ticks (66 ms)   |      *      |
+|              Run_Single_Iteration              |  12476 ticks (12476 ms)  |  633 ticks (633 ms)  |   19.71X    |
+|   Person_Detection_Ten_Ierations_With_Person   | 124769 ticks (124769 ms) | 6324 ticks (6324 ms) |   19.73X    |
+| Person_Detection_Ten_Ierations_With_out_Person | 124770 ticks (124770 ms) | 6325 ticks (6325 ms) |   19.72X    |
