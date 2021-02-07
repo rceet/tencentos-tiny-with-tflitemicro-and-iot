@@ -86,7 +86,7 @@ TensorFlow Lite Micro 目前仅支持有限的 TensorFlow 算子，因此可运�
 
 - [`micro_ops.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/kernels/micro_ops.h) 提供给解释器（interpreter）用于运行模型的操作。
 - [`micro_error_reporter.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/micro_error_reporter.h) 输出调试信息。
-- [`micro_interpreter.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/micro_interpreter.h) Tensorflow Lite Micro 解释器，用来运行我们的模型。
+- [`micro_interpreter.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/micro_interpreter.h) Tensorflow Lite Micro 解释器，用来运行模型。
 - [`schema_generated.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/schema/schema_generated.h) 定义 TensorFlow Lite [`FlatBuffer`](https://google.github.io/flatbuffers/) 数据结构。
 - [`version.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/version.h) 提供 Tensorflow Lite 架构的版本信息。
 
@@ -109,11 +109,11 @@ tflite::MicroErrorReporter micro_error_reporter;
 tflite::ErrorReporter* error_reporter = &micro_error_reporter;
 ```
 
-该对象被传递到解释器（interpreter）中用于记录日志。由于微控制器通常具有多种日志记录机制，因此 `tflite::MicroErrorReporter` 在实现上考虑了不同设备的差异性。
+该对象被传递到解释器（interpreter）中用于记录日志。由于微控制器通常具有多种日志记录机制，因此 `tflite::MicroErrorReporter` 在实现上考虑了设备的差异性。
 
 ### 1.3.3 加载模型
 
-在以下代码中，实例化的 `char` 数组中包含了模型信息，`g_tiny_conv_micro_features_model_data` （要了解其是如何构建的，请参见 [“构建与转换模型”](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。随后我们检查模型来确保其架构版本与我们使用的版本所兼容：
+在以下代码中，实例化的 `char` 数组中包含了模型信息，`g_tiny_conv_micro_features_model_data` （要了解其是如何构建的，请参见 [“构建与转换模型”](https://tensorflow.google.cn/lite/microcontrollers/build_convert) 。随后我们检查模型来确保其架构版本与使用版本兼容：
 
 ```C++
 const tflite::Model* model =
@@ -127,7 +127,7 @@ if (model->version() != TFLITE_SCHEMA_VERSION) {
 }
 ```
 
-### 1.3.4实例化 OP 解析器
+### 1.3.4 实例化 OP 解析器
 
 解释器（interpreter）需要一个 [`micro_ops`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/kernels/micro_ops.h) 实例来访问 Tensorflow 操作。可以扩展此类来添加自定义操作：
 
@@ -146,7 +146,7 @@ tflite::SimpleTensorAllocator tensor_allocator(tensor_arena,
                                                tensor_arena_size);
 ```
 
-注意：所需内存大小取决于您使用的模型，可能需要通过实验来确定。
+注意：所需内存大小取决于使用的模型，可能需要通过实验来确定。
 
 ### 1.3.6 实例化解释器（Interpreter）
 
@@ -159,7 +159,7 @@ tflite::MicroInterpreter interpreter(model, resolver, &tensor_allocator,
 
 ### 1.3.7 验证输入维度
 
-`MicroInterpreter` 实例可以通过调用 `.input(0)` 返回模型输入张量的指针，其中 `0` 代表第一个（也是唯一的）输入张量。我们通过检查这个张量来确认它的维度与类型是否与应用匹配：
+`MicroInterpreter` 实例可以通过调用 `.input(0)` 返回模型输入张量的指针。其中 `0` 代表第一个（也是唯一的）输入张量。我们通过检查这个张量来确认它的维度与类型是否与应用匹配：
 
 ```C++
 TfLiteTensor* model_input = interpreter.input(0);
@@ -172,7 +172,7 @@ if ((model_input->dims->size != 4) || (model_input->dims->data[0] != 1) ||
 }
 ```
 
-在这个代码段中，变量 `kFeatureSliceCount` 和 `kFeatureSliceSize` 与输入属性相关，其定义在 [`micro_model_settings.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h) 中。枚举值 `kTfLiteUInt8` 是对 Tensorflow Lite 某一数据类型的引用，其定义在 [`common.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/c/common.h) 中。
+在上述代码中，变量 `kFeatureSliceCount` 和 `kFeatureSliceSize` 与输入相关，其定义在 [`micro_model_settings.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h) 中。枚举值 `kTfLiteUInt8` 是对 Tensorflow Lite 某一数据类型的引用，其定义在 [`common.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/c/common.h) 中。
 
 ### 1.3.8 生成特征
 
@@ -191,7 +191,7 @@ TfLiteStatus feature_status = feature_provider.PopulateFeatureData(
 
 在此例中，特征生成和推理发生在同一循环，因此设备能不断捕捉和处理最新的音频数据。
 
-当您在编写程序时，可能会通过其它的方式生成特征数据，但需要注意的是，特征数据填充完成后才能进行推理。
+在编写程序时，可以通过其它方式生成特征数据，但需要注意，特征数据填充完成后才能进行推理。
 
 ### 1.3.9 运行模型
 
