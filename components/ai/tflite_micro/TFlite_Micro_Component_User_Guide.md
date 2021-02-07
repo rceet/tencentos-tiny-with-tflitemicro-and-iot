@@ -297,7 +297,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 1. 添加 `tensorflow/lite/micro/kernel/cmsis-nn` 源文件；
 2. 添加 `tensorflow/lite/micro/kernel/` 中的算子时，请不要添加 `add.cc`，`conv.cc`，`depthwise_conv.cc`，`softmax.cc`，`fully_connected.cc`，`pooling.cc`，`mul.cc` 源文件；
-3. 添加 `tensorflow/lite/micro/tools` 文件夹下的全部源文件。
+3. 添加 `tensorflow/lite/micro/tools` 文件夹下的源文件。
 
 #### 2.2.1.2 采用 reference 算子生成 .lib 文件 ####
 
