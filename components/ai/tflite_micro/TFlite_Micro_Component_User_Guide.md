@@ -283,13 +283,13 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 </div>
 **注意**
 
-在添加 `tensorflow/lite/micro/kernel` 目录下的源文件时需要区分 `reference` 算子和 Arm `CMSIS-NN`优化加速算子，`tensorflow/lite/micro/kernel` 文件夹内容如下图中所示：
+在添加 `tensorflow/lite/micro/kernel` 目录下的源文件时需要区分 `reference` 算子和 Arm `CMSIS-NN`优化加速算子。s`tensorflow/lite/micro/kernel` 文件夹内容如下图中所示：
 
 <div align=center>
 <img src="image/cmsis和reference.png" width=80% />
 </div>
 
-**注：CMSIS-NN 是 Arm 在 AI 领域针对 IOT 设备开发神经网络加速库，其目的是为了让 AI 在算力和资源有限的设备上落地，更好的发挥 Arm 的生态优势。相关代码和文档已经开源 (https://www.keil.com/pack/doc/CMSIS/NN/html/index.html) 。在 Tensorflow Lite Micro 框架下基于 CMSIS-NN 加速库设计的 CMSIS-NN 算子与 reference 算子的性能对比可参考[附录](./TFlite_Micro_Component_User_Guide.md#%E9%99%84%E5%BD%95cmsis-nn-%E5%AF%B9-tensorflow-lite-micro-%E7%9A%84%E8%BF%90%E7%AE%97%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96) 。**
+**注：CMSIS-NN 是 Arm 在 AI 领域针对 IOT 设备开发的神经网络加速库，其目的是为了让 AI 在算力和资源有限的设备上落地，更好的发挥 Arm 的生态优势。相关代码和文档已经开源 (https://www.keil.com/pack/doc/CMSIS/NN/html/index.html) 。在 Tensorflow Lite Micro 框架下的 CMSIS-NN 算子与 reference 算子性能对比可参考[附录](./TFlite_Micro_Component_User_Guide.md#%E9%99%84%E5%BD%95cmsis-nn-%E5%AF%B9-tensorflow-lite-micro-%E7%9A%84%E8%BF%90%E7%AE%97%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96) 。**
 
 #### 2.2.1.1 采用 CMSIS-NN 生成 .lib 文件 ####
 
