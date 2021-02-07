@@ -276,7 +276,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 ## 2.2 将源文件加入 KEIL 工程并生成 .lib 库
 
 ### 2.2.1 添加文件 ###
-新建目标芯片的 KEIL 工程（本次示例以 ARM Cortex M4 为例），将 `Source` 目录下的 `tensorflow` 和 `third_party` 文件夹导入到 KEIL 工程根目录下，并添加 `tensorflow` 目录中除 `lite/micro/kernels` 以及 `lite/micro/tools` 文件以外的所有源文件（包含 .c 和 .cc)，例如下图所示：
+新建目标芯片的 KEIL 工程（本次示例以 ARM Cortex M4 为例），将 `Source` 目录下的 `tensorflow` 和 `third_party` 文件夹导入到 KEIL 工程根目录下，并添加 `tensorflow` 目录中除 `lite/micro/kernels` 以及 `lite/micro/tools` 文件以外的所有源文件（包含 .c 和 .cc)。如下图所示：
 
 <div align=center>
 <img src="image/lib文件目录.png" width=80% />
