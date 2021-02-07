@@ -343,7 +343,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 ## TencentOS-tiny AI 开发组件
 
-TencentOS-tiny 已将 Tensorflow Lite Micro 以及 CMSIS-NN 集成到 AI 组件中，助力 AI 的发展与落地。随着越来越多的厂商采用 Arm Cortex M55 和 Ethos U NPU IP，相信未来端侧AI的应用会更加广阔。
+TencentOS-tiny 已将 Tensorflow Lite Micro 以及 CMSIS-NN 集成到 AI 组件中，并通过其他组件与云端无缝相连，打通从云到端整条链路，助力 AI 的发展与落地。随着越来越多的厂商采用 Arm Cortex M55 和 Ethos U NPU IP，相信未来端侧AI的应用会更加广阔。
 
 TencentOS-tiny AI组件：https://github.com/rceet/tencentos-tiny-with-tflitemicro-and-iot/tree/master/components/ai/tflite_micro
 
