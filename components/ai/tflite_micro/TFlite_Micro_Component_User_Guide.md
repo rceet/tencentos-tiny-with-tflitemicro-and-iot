@@ -195,7 +195,7 @@ TfLiteStatus feature_status = feature_provider.PopulateFeatureData(
 
 ### 1.3.9 运行模型
 
-通过在 `tflite::MicroInterpreter` 实例上调用 `Invoke()` 可快速触发推理过程：
+通过在 `tflite::MicroInterpreter` 实例上调用 `Invoke()` 可快速触发推理：
 
 ```C++
 TfLiteStatus invoke_status = interpreter.Invoke();
@@ -205,7 +205,7 @@ if (invoke_status != kTfLiteOk) {
 }
 ```
 
-通过检查返回值 `TfLiteStatus` 来确定运行是否成功。在 [`common.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/c/common.h) 中定义的 `TfLiteStatus` 的值有 `kTfLiteOk` 和 `kTfLiteError`。
+通过检查返回值 `TfLiteStatus` 来确定运行是否成功。在 [`common.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/c/common.h) 中定义的 `TfLiteStatus` 有 `kTfLiteOk` 和 `kTfLiteError`两种状态。
 
 ### 1.3.10 获取输出
 
@@ -238,7 +238,7 @@ for (int category_index = 0; category_index < kCategoryCount;
 将 TensorFlow project 下载到本地，在终端中输入以下命令：
 
 ```bash
-git clone --depth 1 https://github.com/QingChuanWS/tensorflow.git
+git clone https://github.com/tensorflow/tensorflow.git
 git checkout 5e0ed38eb746f3a86463f19bcf7138a959ddb2d4
 ```
 
