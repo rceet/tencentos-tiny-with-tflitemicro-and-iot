@@ -24,9 +24,9 @@ _**目前**_[_**Tensorflow Lite Micro及CMSIS-NN组件**_](https://github.com/Te
 
 ![系统硬件图](./image/微信图片_20210110142403.jpg)
 
-整体系统的工作流程可以概述为以下内容：首先基于TencentOS-tiny实现了一个超低功耗的机器视觉应用——基于深度学习算法以及Tensorflow Lite Micro 端侧神经网络推理框架的小区域人形检测，根据我们实际的测试，行人检测的正确率达到84%，且可以在MCU端上运行；在MCU端检测到有人之后，MCU端将有关行人的数据上传到云端，云端根据收到的数据来唤醒相关的高性能设备，进一步获取行人的真实数据。
+整体系统的工作流程可以概述为以下内容：首先基于TencentOS-tiny实现了一个超低功耗的机器视觉应用——基于深度学习算法，Tensorflow Lite Micro和CMSIS-NN的小区域人形检测。根据我们实际的测试，行人检测的正确率达到84%，且可以在MCU端上运行；在MCU端检测到人之后，MCU端将有关行人的数据上传到云端，云端根据收到的数据来唤醒相关的高性能设备，进一步获取行人的真实数据。
 
-相比与传统的社区管理员通过大量连接了高清摄像头的屏幕来完成社区安全管理的方法相比，这种基于TencentOS-tiny和CMSIS-NN实现的超低功耗机器视觉与端云协同的智能安防系统只会在端侧检测到有人之后才会将视频流接入管理员的屏幕，不仅减轻了管理员的工作负担，而且更重要的是端侧实现的智能化应用将极大的节省了系统的带宽资源，在提升系统响应的同时也降低了成本，可以称的上是一种比较好的解决方案。
+相比与传统的社区管理员通过大量连接了高清摄像头的屏幕来完成社区安全管理的方法相比，这种基于TencentOS-tiny和CMSIS-NN实现的超低功耗机器视觉与端云协同的智能安防系统只会在端侧检测到人之后才会将视频流接入管理员的屏幕，不仅减轻了管理员的工作负担，更重要的是端侧实现的智能化应用将极大的节省了系统的带宽资源，在提升系统响应的同时也降低了成本，是一种比较好的解决方案。
 
 演示视频：
 
@@ -36,18 +36,18 @@ _**目前**_[_**Tensorflow Lite Micro及CMSIS-NN组件**_](https://github.com/Te
 
 我们已将相关代码和文档开源至官方主仓库，而且开发者可以按照指南进行复现。
 
-#### **1. 准备目标硬件（开发板/传感器/模组）**
+#### **1.准备目标硬件（开发板/传感器/模组）**
 
 需要准备如下硬件:
 
-- 开发板：NUCLEO-L496ZG，MCU为STM32L496ZG；
-- Camera：获取RGB图像，本例程使用OV2640摄像头；
+- 开发板：NUCLEO-L496ZG，MCU为STM32L496ZG
+- Camera：获取RGB图像，本例程使用OV2640摄像头
 - 通信模组：负责MCU与云端之间的通信，本例程选用的乐鑫esp8266
 
 ## **2.准备系统软件**
 
 - 首先，参考TencentOS-tiny基于Keil的移植教程进行移植： [https://github.com/Tencent/TencentOS-tiny/blob/master/doc/10.Porting\_Manual\_for\_KEIL.md](https://github.com/Tencent/TencentOS-tiny/blob/master/doc/10.Porting_Manual_for_KEIL.md)。为了方便初始化MCU的外设，后续要继续使用STM32CubeMX软件，请确保安装了该软件；注：在系统移植成功后，工程可以进行线程任务切换，通过串口打印"hello world"，基础Keil工程代码准备完毕。
-- 准备Tensorflow Lite Micro组件。在主仓库中的 `TencentOS-tiny\components\ai\tflite_micro` 路径下，本次我们主要是要使用Tensorflow Lite Micro推理框架来实现行人检测任务，所以可以直接采用对应内核的lib库文件的方式来将其集成到系统中，在实际应用的过程中只需要编写调用有关的API即可以实现AI算法在MCU平台上的部署。
+- 准备Tensorflow Lite Micro组件。本次我们主要是使用Tensorflow Lite Micro推理框架来实现行人检测任务，所以可以直接采用主仓库中的 `TencentOS-tiny\components\ai\tflite_micro` 路径下对应的内核lib库文件来将其集成到系统中，在实际应用过程中只需要编写调用有关的API即可以实现AI算法在MCU平台上的部署。
 - **如何制作lib库文件以及如何使能CMSIS-NN加速**请参考**Tensorflow Lite micro组建使用说明**: https://github.com/Tencent/TencentOS-tiny/blob/master/components/ai/tflite_micro/TFlite_Micro_Component_User_Guide.md
 
 ## **3.系统移植流程**：
@@ -56,7 +56,7 @@ _**目前**_[_**Tensorflow Lite Micro及CMSIS-NN组件**_](https://github.com/Te
 
 - 添加与本例程相关的[Necluo STM32L496RG的摄像头驱动代码](https://github.com/Tencent/TencentOS-tiny/tree/master/board/NUCLEO_STM32L496ZG/BSP/Hardware/Src)(此处使用的是我们提交到官方仓库中的驱动代码），
 - 在mcu\_init函数重写DCMI帧中断回调函数，
-    - 值得注意的是，代码需要写在CubeMx生成的注释语句内，当使用CubeMX重新配置外设并生成代码时，所添加的代码才不会被覆盖掉，如下所示，代码添加在/\* USER CODE BEGIN 4 _/ 和 /_ USER CODE END 4 \*/注释语句之间：
+    - 值得注意的是，当使用CubeMX重新配置外设并生成代码时，代码需要写在CubeMx生成的注释语句内，这样添加的代码才不会被覆盖。如下所示，代码添加在/\* USER CODE BEGIN 4 _/ 和 /_ USER CODE END 4 \*/注释语句之间：
 
 ```
 /* USER CODE BEGIN 4 */
@@ -112,7 +112,7 @@ TencentOS-tiny\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow\lite\micro
 
 至此Tensorflow Lite Micro已经成功的移植到MCU平台中，可以开始设计与行人检测有关的应用层代码了。
 
-- 设计图像预处理函数。在本例程中，模型要求输入神经网络的图像为灰度图，为完成摄像头获取的RGB彩图到模型输入需要的灰度图转换，需从输入的RGB565像素格式中解析出R、G、B三通道的值，再根据心理学公式计算出单个像素点的灰度，具体代码如下：
+- 设计图像预处理函数。在本例程中，模型的输入为灰度图，为完成摄像头获取的RGB图像到灰度图转换，需从输入的RGB565像素格式中解析出R、G、B三通道的值，再根据公式计算出单个像素点的灰度，具体代码如下：
 
 ```
 uint8_t rgb565_to_gray(uint16_t bg_color)
@@ -193,9 +193,9 @@ void task2(void *arg)
 }
 ```
 
-本主体应用程序实现若在10帧中检测到超过半数的人像，就会判定为异常现象并上报，同时根据我们实际的测试结果，执行一帧图像推理，耗时约633 ms。
+主体应用程序实现若在10帧中检测到超过半数的人像，就判定为异常现象上报。根据我们实际的测试结果，执行一帧图像推理，耗时约633 ms。
 
-- 在MCU端本地处理完行人检测之后，MCU与云端之间的数据传输部分代码具体如下：
+- 在MCU端本地处理完行人检测后，MCU与云端建立数据连接并传输数据。部分代码如下：
 
 ```
 int deal_up_stream_user_logic(DeviceProperty *pReportDataList[], int *pCount)
@@ -251,7 +251,7 @@ void deal_down_stream_user_logic(void *client, ProductDataDefine   * pData)
 
 - 腾讯物联网开发平台-腾讯连连小程序开发
 
-为了方便用户实时地查看设备端上传的信息（是否有异常报警、人流量计数等），以及控制设备端发出报警提示，我们利用腾讯云IoT Explorer提的供开发平台，开发腾讯连连小程序。
+为了方便用户实时查看端侧上传的信息（是否有异常报警、人流量计数等）以及控制设备端发出报警提示，我们利用腾讯云IoT Explorer开发平台，开发腾讯连连小程序。
 
 开发过程如下，登录腾讯云开发平台：
 
@@ -282,11 +282,19 @@ void deal_down_stream_user_logic(void *client, ProductDataDefine   * pData)
 步骤四：设备调试
 
 - 将产品ID、密钥、设备号信息填入设备端的程序；
-- 基于腾讯TOS的AT组件和ESP8266适配的SAL框架，移植程序；
+- 基于TencentOS-tiny的AT组件和ESP8266适配的SAL框架，移植程序；
 - 设备端编写上行和下行数据处理逻辑。
 
 ![设备模板](./image/4_设备调试.png)
 
 # 四、结语
 
-我们提出了一种基于边缘AI+TencentOS-tiny的新架构，虽然在用户前端的包装还有许多可以改进的空间，但是通过对这种机制的验证并且配合详细的用户移植文档，使我们的工作具备了更多的可迁移性，同时也打开了TencentOS-tiny对于人工智能领域的支持，在未来我们会继续完善Tensorflow Lite Micro组件并不断更新新的应用，致力于丰富整个TencentOS-tiny以及Arm生态。
+我们提出了一种基于边缘AI+TencentOS-tiny的新架构，虽然在用户前端的包装还有许多可以改进的空间，但通过对整体方案的验证并且配合详细的用户移植文档，使我们的工作具备了可迁移性和扩展性，同时也打开了TencentOS-tiny对于人工智能领域的支持。在未来我们会继续完善Tensorflow Lite Micro组件并不断更新应用，致力于丰富整个TencentOS-tiny以及Arm生态。并且随着越来越多的厂商采用 Arm Cortex M55 和 Ethos U NPU IP方案，相信未来端侧AI的应用会更加广阔。
+
+TencentOS-tiny AI组件：https://github.com/rceet/tencentos-tiny-with-tflitemicro-and-iot/tree/master/components/ai/tflite_micro
+
+Arm Cortex M55：https://www.arm.com/products/silicon-ip-cpu/cortex-m/cortex-m55
+
+Arm Ethos U55：https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55
+
+Arm Ethos U65：https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u65
