@@ -107,7 +107,9 @@ void task1(void *arg)
 
 添加到工程中，最后，我们关闭Keil的Microlib库，添加有关的include目录
 
-![](./image/tflu_添加include.png)
+<div align=center>
+<img src="./image/tflu_添加include.png" width=70% />
+</div>
 
 注：最下方的路径为：
 
@@ -117,7 +119,9 @@ TencentOS-tiny\components\ai\tflite_micro\ARM_CortexM4_lib\tensorflow\lite\micro
 
 - 调整优化等级和tflite\_micro的交互信息输出串口：
 
-![调整优化等级和tflite\_micro的交互信息输出串口](./image/tflu_STM32496宏.png)
+<div align=center>
+<img src="./image/tflu_STM32496宏.png" width=70% />
+</div>
 
 其中宏`NUCLEO_STM32L496ZG`是指定Nucleo STM32L496的hlpuart1为系统printf函数的输出串口，具体定义在Nucleo STM32L496的BSP文件夹中的`mcu_init.c`中。
 
