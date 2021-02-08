@@ -18,15 +18,11 @@ _**目前**_[_**Tensorflow Lite Micro及CMSIS-NN组件**_](https://github.com/Te
 
 系统拓扑结构图：
 
-![系统架构图](./image/设计框架.jpg)
-
 <div align=center>
 <img src="./image/设计框架.jpg" width=50% />
 </div>
 
 单个TencentOS-tiny内部结构图：
-
-![单个MCU设备架构图](./image/MCU架构图.jpg)
 
 <div align=center>
 <img src="./image/MCU架构图.jpg" width=50% />
