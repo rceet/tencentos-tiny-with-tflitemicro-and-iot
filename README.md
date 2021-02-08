@@ -269,7 +269,7 @@ void deal_down_stream_user_logic(void *client, ProductDataDefine   * pData)
 步骤一：新建产品
 
 <div align=center>
-<img src="./image/1_新建产品.png" width=50% />
+<img src="./image/1_新建产品.png" width=80% />
 </div>
 
 步骤二：跟据场景和应用定义数据模板
@@ -285,7 +285,7 @@ void deal_down_stream_user_logic(void *client, ProductDataDefine   * pData)
 - **报警提示** ：当用户看到有异常停留，可以控制设备端发出报警提示，也可以关闭报警提示。
 
 <div align=center>
-<img src="./image/2_数据模板.png" width=70% />
+<img src="./image/2_数据模板.png" width=80% />
 </div>
 
 步骤三：编辑小程序的面板
@@ -293,7 +293,7 @@ void deal_down_stream_user_logic(void *client, ProductDataDefine   * pData)
 由于目前腾讯连连提供的模板较少，暂时使用按钮显示设备状态信息。
 
 <div align=center>
-<img src="./image/3_编辑面板.png" width=70% />
+<img src="./image/3_编辑面板.png" width=80% />
 </div>
 
 步骤四：设备调试
@@ -303,7 +303,7 @@ void deal_down_stream_user_logic(void *client, ProductDataDefine   * pData)
 - 设备端编写上行和下行数据处理逻辑。
 
 <div align=center>
-<img src="./image/4_设备调试.png" width=70% />
+<img src="./image/4_设备调试.png" width=80% />
 </div>
 
 # 四、结语
