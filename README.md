@@ -316,6 +316,8 @@ void deal_down_stream_user_logic(void *client, ProductDataDefine   * pData)
 
 TencentOS-tiny AI组件：https://github.com/rceet/tencentos-tiny-with-tflitemicro-and-iot/tree/master/components/ai/tflite_micro
 
+Arm Cortex M4：https://www.arm.com/products/silicon-ip-cpu/cortex-m/cortex-m4
+
 Arm Cortex M55：https://www.arm.com/products/silicon-ip-cpu/cortex-m/cortex-m55
 
 Arm Ethos U55：https://www.arm.com/products/silicon-ip-cpu/ethos/ethos-u55
