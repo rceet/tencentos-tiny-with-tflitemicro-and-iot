@@ -20,9 +20,17 @@ _**目前**_[_**Tensorflow Lite Micro及CMSIS-NN组件**_](https://github.com/Te
 
 ![系统架构图](./image/设计框架.jpg)
 
+<div align=center>
+<img src="./image/设计框架.jpg" width=50% />
+</div>
+
 单个TencentOS-tiny内部结构图：
 
 ![单个MCU设备架构图](./image/MCU架构图.jpg)
+
+<div align=center>
+<img src="./image/MCU架构图.jpg" width=50% />
+</div>
 
 整体系统流程图：
 
@@ -30,8 +38,6 @@ _**目前**_[_**Tensorflow Lite Micro及CMSIS-NN组件**_](https://github.com/Te
 <img src="./image/all.jpg" width=50% />
 </div>
 
-
-![系统硬件图](./image/微信图片_20210110142403.jpg)
 
 整体系统的工作流程可以概述为以下内容：首先基于TencentOS-tiny实现了一个超低功耗的机器视觉应用——基于深度学习算法，Tensorflow Lite Micro和CMSIS-NN的小区域人形检测。根据我们实际的测试，行人检测的正确率达到84%，且可以在MCU端上运行；在MCU端检测到人之后，MCU端将有关行人的数据上传到云端，云端根据收到的数据来唤醒相关的高性能设备，进一步获取行人的真实数据。
 
