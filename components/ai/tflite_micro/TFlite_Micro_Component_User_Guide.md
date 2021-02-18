@@ -127,12 +127,29 @@ if (model->version() != TFLITE_SCHEMA_VERSION) {
 }
 ```
 
-### 1.3.4 实例化 OP 解析器
+### 1.3.4 实例化算子
 
-解释器（interpreter）需要一个 [`micro_ops`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/kernels/micro_ops.h) 实例来访问 Tensorflow 操作。可以扩展此类来添加自定义操作：
+算子（OP）实例化有两种方法：1. `tflite::op::micro::AllOpsResolver` 2. `tflite::MicroMutableOpResolver`
 
+前者包含所有Tensorflow Lite Micro可用算子，并将他们提供给解释器（Interpreter）
 ```C++
-tflite::ops::micro::micro_op_resolver resolver;
+tflite::ops::micro::AllOpsResolver resolver;
+```
+前者是一种可靠但是比较浪费资源的方法，因为给定的模型不会使用全部算子。多余的算子会占用不必要的内存空间，因此后者只需要实例化真正使用的算子。
+```C++
+//定义模型需要的算子
+namespace tflite {
+namespace ops {
+namespace micro {
+TfLiteRegistration* Register_SOFTMAX();
+} //namespace micro
+} //namespace ops
+} //namespace tflite
+
+tflite::MicroMutableOpResolver micro_mutable_op_resolver;
+micro_mutable_op_resolver.AddBuiltin(
+  tflite::BuiltinOperator_SOFTMAX,
+  tflite::ops::micro::Register_SOFTMAX());
 ```
 
 ### 1.3.5 分配内存
@@ -174,26 +191,7 @@ if ((model_input->dims->size != 4) || (model_input->dims->data[0] != 1) ||
 
 在上述代码中，变量 `kFeatureSliceCount` 和 `kFeatureSliceSize` 与输入相关，其定义在 [`micro_model_settings.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/micro_speech/micro_features/micro_model_settings.h) 中。枚举值 `kTfLiteUInt8` 是对 Tensorflow Lite 某一数据类型的引用，其定义在 [`common.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/c/common.h) 中。
 
-### 1.3.8 生成特征
-
-微控制器的音频输入作为输入到模型中的数据。[`feature_provider.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/micro_speech/feature_provider.h) 中定义的 `FeatureProvider` 类捕获音频并将其转换为一组特征集合。当该类被实例化时，我们将获取的 `TfLiteTensor` 以及 `FeatureProvider` 作为参数，填充输入数据用于模型运算：
-
-```C++
-FeatureProvider feature_provider(kFeatureElementCount, model_input->data.uint8);
-```
-
-`FeatureProvider` 将计算最近一秒的音频，生成一组特征后填充输入张量：
-
-```C++
-TfLiteStatus feature_status = feature_provider.PopulateFeatureData(
-    error_reporter, previous_time, current_time, &how_many_new_slices);
-```
-
-在此例中，特征生成和推理发生在同一循环，因此设备能不断捕捉和处理最新的音频数据。
-
-在编写程序时，可以通过其它方式生成特征数据，但需要注意，特征数据填充完成后才能进行推理。
-
-### 1.3.9 运行模型
+### 1.3.8 运行模型
 
 通过在 `tflite::MicroInterpreter` 实例上调用 `Invoke()` 可快速触发推理：
 
@@ -207,7 +205,7 @@ if (invoke_status != kTfLiteOk) {
 
 通过检查返回值 `TfLiteStatus` 来确定运行是否成功。在 [`common.h`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/c/common.h) 中定义的 `TfLiteStatus` 有 `kTfLiteOk` 和 `kTfLiteError`两种状态。
 
-### 1.3.10 获取输出
+### 1.3.9 获取输出
 
 模型的输出张量可以通过在 `tflite::MicroIntepreter` 上调用 `output(0)` 获得，其中 `0` 代表第一个（也是唯一的）输出张量。
 
