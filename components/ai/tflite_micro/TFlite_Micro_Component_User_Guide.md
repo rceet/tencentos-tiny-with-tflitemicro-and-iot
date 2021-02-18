@@ -326,9 +326,67 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 最后点击编译链接选项，即可在工程根目录的 `Objects` 文件夹下生成 ARM Cortex M4 对应的 .lib 库。其他内核型号的 tflite_micro 库以此类推。
 
-# 3. 在 TencentOS tiny 中使能 Tensorflow Lite Micro
+# 3. 在 TencentOS tiny 中使能 Tensorflow Lite Micro，实现端云结合
 
-通过上述步骤，我们成功将 Tensorflow Lite Micro 以及 CMSIS-NN 生成 .lib 组件，在应用程序开发中，只需要包含对应的 .h 文件
+通过上述步骤，我们成功将 Tensorflow Lite Micro 以及 CMSIS-NN 生成 .lib 组件。在应用程序开发中，只需要包含对应的 .h 文件，即可使能相应功能。
+
+例如,在 TencentOS-tiny 的 example 目录下包含了 tflitemicro_person_detection demo。通过在 [main_functions.cc](https://github.com/Tencent/TencentOS-tiny/blob/master/examples/tflitemicro_person_detection/tflu_person_detection/main_functions.cc)中调用组件的头文件来载入 Tensorflow Lite Micro 以及 CMSIS-NN。
+
+```C++
+//...
+#include "tensorflow/lite/micro/micro_error_reporter.h"
+#include "tensorflow/lite/micro/micro_interpreter.h"
+#include "tensorflow/lite/micro/micro_mutable_op_resolver.h"
+#include "tensorflow/lite/schema/schema_generated.h"
+#include "tensorflow/lite/version.h"
+//...
+```
+
+腾讯物联网开发平台-腾讯连连小程序开发
+
+为了方便用户实时查看端侧上传的信息（是否有异常报警、人流量计数等）以及控制设备端发出报警提示，我们利用 Tencent Cloud IoT Explorer 开发平台，开发 Tencent 连连小程序。
+
+开发过程如下，登录腾讯云开发平台：
+
+步骤一：新建产品
+
+<div align=center>
+<img src="./image/1_新建产品.png" width=80% />
+</div>
+
+步骤二：跟据场景和应用定义数据模板
+
+设备端上传的只读数据：
+
+- **行人检测** ：设备端检测到行人时，标志位置为1；
+- **异常停留报警** ：当设备端持续检测到行人时，触发异常停留报警，标志位置为1；
+- **行人计数** ：当设备端的行人检测结果从无人变化到有人时，人流量计数值+1
+
+设备端接收的控制指令：
+
+- **报警提示** ：当用户看到有异常停留，可以控制设备端发出报警提示，也可以关闭报警提示。
+
+<div align=center>
+<img src="./image/2_数据模板.png" width=80% />
+</div>
+
+步骤三：编辑小程序的面板
+
+由于目前腾讯连连提供的模板较少，暂时使用按钮显示设备状态信息。
+
+<div align=center>
+<img src="./image/3_编辑面板.png" width=80% />
+</div>
+
+步骤四：设备调试
+
+- 将产品ID、密钥、设备号信息填入设备端的程序；
+- 基于TencentOS-tiny的AT组件和ESP8266适配的SAL框架，移植程序；
+- 设备端编写上行和下行数据处理逻辑。
+
+<div align=center>
+<img src="./image/4_设备调试.png" width=80% />
+</div>
 
 ## 附录：CMSIS-NN 对 Tensorflow Lite Micro 的运算性能优化
 
