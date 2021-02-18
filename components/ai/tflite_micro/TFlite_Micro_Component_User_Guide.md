@@ -330,7 +330,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 通过上述步骤，我们成功将 Tensorflow Lite Micro 以及 CMSIS-NN 生成 .lib 组件。在应用程序开发中，只需要包含对应的 .h 文件，即可使能相应功能。
 
-例如,在 TencentOS-tiny 的 example 目录下包含了 tflitemicro_person_detection demo。通过在 [main_functions.cc](https://github.com/Tencent/TencentOS-tiny/blob/master/examples/tflitemicro_person_detection/tflu_person_detection/main_functions.cc)中调用组件的头文件来载入 Tensorflow Lite Micro 以及 CMSIS-NN。
+例如,在 TencentOS-tiny 的 `example` 目录下包含了 `tflitemicro_person_detection` demo。通过在 [main_functions.cc](https://github.com/Tencent/TencentOS-tiny/blob/master/examples/tflitemicro_person_detection/tflu_person_detection/main_functions.cc)中调用组件的头文件来载入 Tensorflow Lite Micro 以及 CMSIS-NN。
 
 ```C++
 //...
@@ -392,14 +392,12 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 - 硬件平台：Necluo STM32L496ZG
 - 测试输入图片：`tensorflow\lite\micro\tools\make\downloads\person_model_int8` 目录中 `person_image_data.cc` 和 `no_person_image_data.cc` 保存的 96 * 96 pixels ( uint_8 ) 灰度图。
-- 单次执行和 10 次累计执行的测试结果如下：
+- Tensorflow Lite Micro 初始化和 10 次累计执行的测试结果如下：
 
 |                      Case                      |   Disable ARM-CMSIS-NN   |   Enable ARM-CMSIS-NN   | Improvement |
 | :--------------------------------------------: | :----------------------: | :------------------: | :---------: |
 |          Initialize_Benchmark_Runner           |     65 ticks (65 ms)     |   66 ticks (66 ms)   |      *      |
-|              Run_Single_Iteration              |  12476 ticks (12476 ms)  |  633 ticks (633 ms)  |   19.71X    |
-|   Person_Detection_Ten_Ierations_With_Person   | 124769 ticks (124769 ms) | 6324 ticks (6324 ms) |   19.73X    |
-| Person_Detection_Ten_Ierations_With_out_Person | 124770 ticks (124770 ms) | 6325 ticks (6325 ms) |   19.72X    |
+|         Person_Detection_Ten_Ierations         | 124769 ticks (124769 ms) | 6324 ticks (6324 ms) |   19.73X    |
 
 ## TencentOS-tiny AI 开发组件
 
