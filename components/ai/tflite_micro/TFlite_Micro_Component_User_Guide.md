@@ -394,7 +394,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 - 测试输入图片：`tensorflow\lite\micro\tools\make\downloads\person_model_int8` 目录中 `person_image_data.cc` 和 `no_person_image_data.cc` 保存的 96 * 96 pixels ( uint_8 ) 灰度图。
 - Tensorflow Lite Micro 初始化和 10 次累计执行的测试结果如下：
 
-|                      Case                      |   Disable ARM-CMSIS-NN   |   Enable ARM-CMSIS-NN   | Improvement |
+|                      Case                      |   Disable CMSIS-NN with FP32 model  |   Enable CMSIS-NN with uint8 model  | Improvement |
 | :--------------------------------------------: | :----------------------: | :------------------: | :---------: |
 |          Initialize_Benchmark_Runner           |     65 ticks (65 ms)     |   66 ticks (66 ms)   |      *      |
 |         Person_Detection_Ten_Ierations         | 124769 ticks (124769 ms) | 6324 ticks (6324 ms) |   19.73X    |
