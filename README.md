@@ -314,7 +314,7 @@ void deal_down_stream_user_logic(void *client, ProductDataDefine   * pData)
 
 我们提出了一种基于边缘AI+TencentOS-tiny的新架构，虽然在用户前端的包装还有许多可以改进的空间，但通过对整体方案的验证并且配合详细的用户移植文档，使我们的工作具备了可迁移性和扩展性，同时也打开了TencentOS-tiny对于人工智能领域的支持。在未来我们会继续完善Tensorflow Lite Micro组件并不断更新应用，致力于丰富整个TencentOS-tiny以及Arm生态。并且随着越来越多的厂商采用 Arm Cortex M55 和 Ethos U NPU IP方案，相信未来端侧AI的应用会更加广阔。
 
-TencentOS-tiny AI组件：https://github.com/rceet/tencentos-tiny-with-tflitemicro-and-iot/tree/master/components/ai/tflite_micro
+TencentOS-tiny AI组件：https://github.com/Tencent/TencentOS-tiny/tree/master/components/ai/tflite_micro
 
 Arm Cortex M4：https://www.arm.com/products/silicon-ip-cpu/cortex-m/cortex-m4
 
