@@ -12,7 +12,7 @@
 
 **2.本系统搭载了Tensorflow Lite Micro的超低功耗深度学习AI推理框架以及Arm CMSIS-NN加速库。** Tensorflow Lite Micro是Tensorflow框架针对微控制器应用场景所专门设计的深度学习推理框架，它占用的资源少，运行时内存最低只需要16KB。同时其依托于Tensorflow平台强大的生态背景，使得更多开发者可以方便的集成、使用AI算法。Tensorflow Lite Micro通过使能Arm开源加速库CMSIS-NN，为端侧带来人工智能的新活力(https://www.keil.com/pack/doc/CMSIS/NN/html/index.html)。
 
-_**目前**_[_**Tensorflow Lite Micro及CMSIS-NN组件**_](https://github.com/Tencent/TencentOS-tiny/tree/master/components/ai/tflite_micro)_**已经进入TencentOS-tiny主仓库，其中提供了Tensorflow Lite Micro全部源码以及针对ARM Cortex-M系列的MDK lib库文件，可以方便集成到MCU开发环境中。**
+_**目前**_[_**Tensorflow Lite Micro及CMSIS-NN组件**_](https://github.com/Tencent/TencentOS-tiny/tree/master/components/ai/tflite_micro)**已经进入TencentOS-tiny主仓库，其中提供了Tensorflow Lite Micro全部源码以及针对ARM Cortex-M系列的MDK lib库文件，可以方便集成到MCU开发环境中。**
 
 **3.本系统将边缘AI和TencentOS-tiny结合在一起，面向区域安防管理，提出了一种新的端云系统架构**。通过对系统的验证并且配合详细的用户移植文档，让整个系统具备在多领域多场景的可迁移性与易用性。
 
