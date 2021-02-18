@@ -326,6 +326,10 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 最后点击编译链接选项，即可在工程根目录的 `Objects` 文件夹下生成 ARM Cortex M4 对应的 .lib 库。其他内核型号的 tflite_micro 库以此类推。
 
+# 3. 在 TencentOS tiny 中使能 Tensorflow Lite Micro
+
+通过上述步骤，我们成功将 Tensorflow Lite Micro 以及 CMSIS-NN 生成 .lib 组件，在应用程序开发中，只需要包含对应的 .h 文件
+
 ## 附录：CMSIS-NN 对 Tensorflow Lite Micro 的运算性能优化
 
 - 硬件平台：Necluo STM32L496ZG
@@ -342,8 +346,6 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 ## TencentOS-tiny AI 开发组件
 
 TencentOS-tiny 已将 Tensorflow Lite Micro 以及 CMSIS-NN 集成到 AI 组件中，并通过其他组件与腾讯云无缝相连，打通从云到端整条链路，助力 AI 的发展与落地。随着越来越多的厂商采用 Arm Cortex M55 和 Ethos U NPU IP，相信未来端侧AI的应用会更加广阔。
-
-TencentOS-tiny AI组件：https://github.com/rceet/tencentos-tiny-with-tflitemicro-and-iot/tree/master/components/ai/tflite_micro
 
 Arm Cortex M55：https://www.arm.com/products/silicon-ip-cpu/cortex-m/cortex-m55
 
