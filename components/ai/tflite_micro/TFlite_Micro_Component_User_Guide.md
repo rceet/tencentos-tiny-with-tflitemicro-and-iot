@@ -66,7 +66,7 @@ unsigned int converted_model_tflite_len = 18200;
 
 ### 1.2.3 算子支持
 
-TensorFlow Lite Micro 目前仅支持有限的 TensorFlow 算子，因此可运行的模型也有所限制。谷歌正致力于在参考实现和针对特定结构的优化方面扩展算子支持。Arm 的 CMSIS-NN 开源加速库也为算子的支持和优化提供了另一种可能。
+TensorFlow Lite Micro 目前仅支持有限的 TensorFlow 算子，因此可运行的模型也有所限制。Google 正致力于在参考实现和针对特定结构的优化方面扩展算子支持。Arm 的 CMSIS-NN 开源加速库也为算子的支持和优化提供了另一种可能。
 
 已支持的算子在文件 [`all_ops_resolver.cc`](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/all_ops_resolver.cc) 中列出。
 
@@ -135,7 +135,7 @@ if (model->version() != TFLITE_SCHEMA_VERSION) {
 ```C++
 tflite::ops::micro::AllOpsResolver resolver;
 ```
-前者是一种可靠但是比较浪费资源的方法，因为给定的模型不会使用全部算子。多余的算子会占用不必要的内存空间，因此后者只需要实例化真正使用的算子。
+前者是一种可靠但是比较浪费资源的方法，因为给定的模型不会使用全部算子。多余的算子会占用不必要的内存空间，因此后者只需要实例化真正使用的算子。模型中包含哪些算子可以通过开源工具 [Netron](https://netron.app/) 查看。
 ```C++
 //定义模型需要的算子
 namespace tflite {
