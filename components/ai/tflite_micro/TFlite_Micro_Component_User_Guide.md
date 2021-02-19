@@ -276,14 +276,14 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 新建目标芯片的 KEIL 工程（本次示例以 ARM Cortex M4 为例），将 `Source` 目录下的 `tensorflow` 和 `third_party` 文件夹导入到 KEIL 工程根目录下，并添加 `tensorflow` 目录中除 `lite/micro/kernels` 以及 `lite/micro/tools` 文件以外的所有源文件（包含 .c 和 .cc)。如下图所示：
 
 <div align=center>
-<img src="image/lib文件目录.png" width=70% />
+<img src="image/lib文件目录.png" width=80% />
 </div>
 **注意**
 
 在添加 `tensorflow/lite/micro/kernel` 目录下的源文件时需要区分 `reference` 算子和 Arm `CMSIS-NN` 优化加速算子。`tensorflow/lite/micro/kernel` 文件夹内容如下图中所示：
 
 <div align=center>
-<img src="image/cmsis和reference.png" width=80% />
+<img src="image/cmsis和reference.png" width=70% />
 </div>
 
 根据图中显示，我们采用 `CMSIS-NN` 优化加速算子制作 .lib 库文件。
