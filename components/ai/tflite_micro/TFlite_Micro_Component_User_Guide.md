@@ -72,7 +72,7 @@ TensorFlow Lite Micro 目前仅支持有限的 TensorFlow 算子，因此可运�
 
 ## 1.3 运行推断
 
-以下部分将介绍软件包自带语音例程中的 [main_functions.cc](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/person_detection_experimental/main_functions.cc) 文件，并阐述了如何使用 Tensorflow Lite Micro 来进行 AI 推理。
+以下部分将介绍软件包自带**语音例程**中的 [main_functions.cc](https://github.com/tensorflow/tensorflow/tree/5e0ed38eb746f3a86463f19bcf7138a959ddb2d4/tensorflow/lite/micro/examples/person_detection_experimental/main_functions.cc) 文件，并阐述了如何使用 Tensorflow Lite Micro 来进行 AI 推理。
 
 ### 1.3.1 包含项
 
