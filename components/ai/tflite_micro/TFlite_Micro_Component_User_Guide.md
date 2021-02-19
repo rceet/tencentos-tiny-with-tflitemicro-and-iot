@@ -331,7 +331,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 最后点击编译链接选项，即可在工程根目录的 `Objects` 文件夹下生成 ARM Cortex M4 对应的 .lib 库。其他内核型号的 tflite_micro 库以此类推。
 
-# 3. 在 TencentOS tiny 中使能 Tensorflow Lite Micro，实现端云结合
+# 3. 在 TencentOS-tiny 中使能 Tensorflow Lite Micro，实现端云结合
 
 通过上述步骤，我们成功将 Tensorflow Lite Micro 以及 CMSIS-NN 生成 .lib 组件。在应用程序开发中，只需要包含对应的 .h 文件，即可使能相应功能。
 
