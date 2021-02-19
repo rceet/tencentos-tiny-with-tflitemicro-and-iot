@@ -16,12 +16,16 @@
 
 为了获得尽可能小的模型，某些情况下可以考虑使用 [训练后量化](https://tensorflow.google.cn/lite/performance/post_training_quantization) 。它会降低模型中数字的精度，从而减小模型规模，比如将 FP32 转化为 Int8。不过，这种操作可能会导致模型推理准确性的下降，对于小规模模型尤为如此，所以我们需要在量化前后分析模型的准确性，以确保这种损失在可接受范围内。
 
-以下这段 Python 代码片段展示了如何使用预训练量化进行模型转换：
+训练后量化需要 representive dataset 作为参考，以下这段 Python 代码片段展示了如何使用训练后量化进行模型转换：
 
 ```python
 import tensorflow as tf
 converter = tf.lite.TFLiteConverter.from_saved_model(saved_model_dir)
-converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
+converter.optimizations = [tf.lite.Optimize.DEFAULT]
+def representative_dataset_generator():
+  for value in reference_data:
+    yeild [np.array(value, dtype=np.float32, ndmin=2)]
+converter.representative_dataset = representative_dataset_generator
 tflite_quant_model = converter.convert()
 open("converted_model.tflite", "wb").write(tflite_quant_model)
 ```
@@ -265,8 +269,8 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 | 参数               | 含义                                            |
 | ------------------ | ----------------------------------------------- |
-| --tensorflow_path  | 下载的tensorflow仓库的根目录（绝对路径）  |
-| --tflitemicro_path | 生成的tensorflow lite micro路径（绝对路径） |
+| --tensorflow_path  | 下载的 Tensorflow 仓库的根目录（绝对路径）  |
+| --tflitemicro_path | 生成的 Tensorflow Lite Micro路径（绝对路径） |
 
 脚本成功运行后打印 `--tensorflow lite micro source file extract successful--` 信息，并在对应的 `tflitemicro_path` 路径下生成 `Source` 文件夹存放 Tensorflow Lite Micro 源文件。
 
