@@ -335,7 +335,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 
 通过上述步骤，我们成功将 Tensorflow Lite Micro 以及 CMSIS-NN 生成 .lib 组件。在应用程序开发中，只需要包含对应的 .h 文件，即可使能相应功能。
 
-例如,在 TencentOS-tiny 的 `example` 目录下包含了 `tflitemicro_person_detection` demo。通过在 [main_functions.cc](https://github.com/Tencent/TencentOS-tiny/blob/master/examples/tflitemicro_person_detection/tflu_person_detection/main_functions.cc)中调用组件的头文件来载入 Tensorflow Lite Micro 以及 CMSIS-NN。
+例如，在 TencentOS-tiny 的 `example` 目录下包含了相关的 AI 案例。通过在函数中调用组件的头文件来载入 Tensorflow Lite Micro 以及 CMSIS-NN。
 
 ```C++
 //...
