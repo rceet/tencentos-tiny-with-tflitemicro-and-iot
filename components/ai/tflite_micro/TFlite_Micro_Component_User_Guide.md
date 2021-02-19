@@ -283,7 +283,7 @@ make -f tensorflow/lite/micro/tools/make/Makefile generate_projects
 在添加 `tensorflow/lite/micro/kernel` 目录下的源文件时需要区分 `reference` 算子和 Arm `CMSIS-NN` 优化加速算子。`tensorflow/lite/micro/kernel` 文件夹内容如下图中所示：
 
 <div align=center>
-<img src="image/cmsis和reference.png" width=70% />
+<img src="image/cmsisnn和reference.png" width=70% />
 </div>
 
 根据图中显示，我们采用 `CMSIS-NN` 优化加速算子制作 .lib 库文件。
