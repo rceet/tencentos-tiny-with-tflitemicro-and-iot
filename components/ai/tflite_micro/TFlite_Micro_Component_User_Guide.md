@@ -237,10 +237,9 @@ for (int category_index = 0; category_index < kCategoryCount;
 
 ```bash
 git clone https://github.com/tensorflow/tensorflow.git
-git checkout 5e0ed38eb746f3a86463f19bcf7138a959ddb2d4
 ```
 
-注：进行 checkout 的原因是由于 Tensorflow 官方仓库的更新速度较快，为了方便开发者学习 .lib 库的制作方法，作者将使用上述版本来进行演示，开发者如果在实际操作过程中出现问题的话也可以通过 [此链接](https://github.com/QingChuanWS/tensorflow) 直接获得作者所使用的Tensorflow工程。
+注：由于 Tensorflow 官方仓库的更新速度较快，为了方便开发者学习 .lib 库的制作方法，作者使用 Hash ID 为 5e0ed38eb746f3a86463f19bcf7138a959ddb2d4 版本来进行演示。由于代码更新，使用 master 版本可能需要对流程或代码进行微调。
 
 进入 clone 好的仓库：
 
